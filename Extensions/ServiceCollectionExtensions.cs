@@ -12,6 +12,8 @@ namespace ms_usuario.Extensions
             services.AddScoped(typeof(IRepository<AreaInteresse>), typeof(Repository<AreaInteresse>));
             services.AddScoped(typeof(IRepository<Conquistas>), typeof(Repository<Conquistas>));
             services.AddScoped(typeof(IRepository<Sociedade>), typeof(Repository<Sociedade>));
+            services.AddScoped(typeof(IRepository<Noticia>), typeof(Repository<Noticia>));
+            services.AddScoped(typeof(IRepository<NoticiaAreaInteresse>), typeof(Repository<NoticiaAreaInteresse>));
             services.AddScoped(typeof(IRepository<Usuario>), typeof(Repository<Usuario>));
             services.AddScoped(typeof(IRepository<UsuarioAreaInteresse>), typeof(Repository<UsuarioAreaInteresse>));
             services.AddScoped(typeof(IRepository<UsuarioConquistas>), typeof(Repository<UsuarioConquistas>));

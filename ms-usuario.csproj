@@ -11,6 +11,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\NoticiaAreaInteresseFeature\NovaPasta1\**" />
+    <Compile Remove="Features\NoticiaAreaInteresseFeature\NovaPasta\**" />
+    <Content Remove="Features\NoticiaAreaInteresseFeature\NovaPasta1\**" />
+    <Content Remove="Features\NoticiaAreaInteresseFeature\NovaPasta\**" />
+    <EmbeddedResource Remove="Features\NoticiaAreaInteresseFeature\NovaPasta1\**" />
+    <EmbeddedResource Remove="Features\NoticiaAreaInteresseFeature\NovaPasta\**" />
+    <None Remove="Features\NoticiaAreaInteresseFeature\NovaPasta1\**" />
+    <None Remove="Features\NoticiaAreaInteresseFeature\NovaPasta\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.7.1" />
     <PackageReference Include="MediatR" Version="12.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.22" />

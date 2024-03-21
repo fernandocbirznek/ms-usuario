@@ -1,6 +1,5 @@
 ﻿using ms_usuario.Domains;
 using ms_usuario.Features.UsuarioFeature.Commands;
-using ms_usuario.Interface;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -59,6 +58,7 @@ namespace ms_usuario.Extensions
         {
             return new()
             {
+                Id = usuario.Id,
                 Nome = usuario.Nome,
                 Email = usuario.Email,
                 TipoUsuario = usuario.TipoUsuario,

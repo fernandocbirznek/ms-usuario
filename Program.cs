@@ -30,6 +30,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(AreaInteresse).Assembly));
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(Conquistas).Assembly));
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(Sociedade).Assembly));
+builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(Noticia).Assembly));
+builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(NoticiaAreaInteresse).Assembly));
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(Usuario).Assembly));
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(UsuarioAreaInteresse).Assembly));
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(UsuarioConquistas).Assembly));

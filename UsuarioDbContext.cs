@@ -11,6 +11,8 @@ namespace ms_usuario
         public DbSet<AreaInteresse> AreaInteresse { get; set; }
         public DbSet<Conquistas> Conquistas { get; set; }
         public DbSet<Sociedade> Sociedade { get; set; }
+        public DbSet<Noticia> Noticia { get; set; }
+        public DbSet<NoticiaAreaInteresse> NoticiaAreaInteresse { get; set; }
         public DbSet<Usuario> Usuario { get; set; }
         public DbSet<UsuarioAreaInteresse> UsuarioAreaInteresse { get; set; }
         public DbSet<UsuarioConquistas> UsuarioConquistas { get; set; }
