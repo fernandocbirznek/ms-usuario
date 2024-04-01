@@ -48,12 +48,12 @@ namespace ms_usuario.Features.NoticiaFeature.Queries
             if (request is null)
                 throw new ArgumentNullException(MessageHelper.NullFor<SelecionarNoticiaManyHomeQuery>());
 
-            IEnumerable<Noticia> sociedadeMany = await GetAsync(request, cancellationToken);
+            IEnumerable<Noticia> noticiaMany = await GetAsync(request, cancellationToken);
             IEnumerable<AreaInteresse> areaInteresseMany = await GetAreaInteresseAsync(cancellationToken);
 
             List<SelecionarNoticiaManyHomeQueryResponse> responseMany = new List<SelecionarNoticiaManyHomeQueryResponse>();
 
-            foreach (Noticia noticia in sociedadeMany)
+            foreach (Noticia noticia in noticiaMany)
             {
                 List<AreaInteresse> noticiaAreaInteresse = new List<AreaInteresse>();
                 foreach (NoticiaAreaInteresse item in noticia.NoticiaAreaInteresseMany)

@@ -4,6 +4,7 @@ using ms_usuario.Domains;
 using ms_usuario.Extensions;
 using ms_usuario.Helpers;
 using ms_usuario.Interface;
+using ms_usuario.Migrations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -32,20 +33,25 @@ namespace ms_usuario.Features.UsuarioFeature.Commands
         public string? Hobbie { get; set; }
         public long? SociedadeId { get; set; }
         public string Token { get; set; }
+        public virtual IEnumerable<AreaInteresse> UsuarioAreaInteresses { get; set; }
+        //public virtual IEnumerable<UsuarioConquistas> UsuarioConquistas { get; set; }
     }
 
     public class LoginHandler : IRequestHandler<LoginCommand, LoginCommandResponse>
     {
         private readonly IConfiguration _configuration;
+        private readonly IRepository<AreaInteresse> _repositoryAreaInteresse;
         private readonly IRepository<Usuario> _repository;
 
         public LoginHandler
         (
             IConfiguration configuration,
+            IRepository<AreaInteresse> repositoryAreaInteresse,
             IRepository<Usuario> repository
         )
         {
             _configuration = configuration;
+            _repositoryAreaInteresse = repositoryAreaInteresse;
             _repository = repository;
         }
 
@@ -60,12 +66,25 @@ namespace ms_usuario.Features.UsuarioFeature.Commands
 
             await Validator(request, cancellationToken);
 
+            IEnumerable<AreaInteresse> areaInteresseMany = await GetAreaInteresseAsync(cancellationToken);
+
             Usuario usuario = await _repository.GetSingleAsync
                 (
                     item => item.Email.Equals(request.Email),
                     cancellationToken,
-                    item => item.Perfil
+                    item => item.Perfil,
+                    item => item.UsuarioAreaInteresses,
+                    item => item.UsuarioConquistas
                 );
+
+            List<AreaInteresse> usuarioAreaInteresse = new List<AreaInteresse>();
+            foreach (UsuarioAreaInteresse item in usuario.UsuarioAreaInteresses)
+            {
+                AreaInteresse areaInteresse = areaInteresseMany.First(area => area.Id.Equals(item.AreaInteresseId));
+                if (areaInteresse is not null)
+                    usuarioAreaInteresse.Add(areaInteresse);
+            }
+
             string hash = request.ObterHash(usuario.Salt);
 
             if (hash != usuario.Senha)
@@ -94,7 +113,7 @@ namespace ms_usuario.Features.UsuarioFeature.Commands
                         )
                 );
 
-            LoginCommandResponse response = request.ToLoginResponse(usuario);
+            LoginCommandResponse response = request.ToLoginResponse(usuarioAreaInteresse, usuario);
             response.Token = new JwtSecurityTokenHandler().WriteToken(token);
 
             return response;
@@ -120,6 +139,17 @@ namespace ms_usuario.Features.UsuarioFeature.Commands
             return await _repository.ExistsAsync
                 (
                     item => item.Email.Equals(request.Email),
+                    cancellationToken
+                );
+        }
+
+        private async Task<IEnumerable<AreaInteresse>> GetAreaInteresseAsync
+        (
+            CancellationToken cancellationToken
+        )
+        {
+            return await _repositoryAreaInteresse.GetAsync
+                (
                     cancellationToken
                 );
         }

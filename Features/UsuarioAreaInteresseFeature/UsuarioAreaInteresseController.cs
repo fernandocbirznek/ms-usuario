@@ -24,11 +24,14 @@ namespace ms_usuario.Features.UsuarioAreaInteresseFeature
             return await this.SendAsync(_mediator, request);
         }
 
-        [HttpDelete("excluir/{usuarioAreaInteresseId}")]
+        [HttpDelete("excluir/{usuarioId}/{areaInteresseId}")]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult> Delete(long usuarioAreaInteresseId)
+        public async Task<ActionResult> Delete(long usuarioId, long areaInteresseId)
         {
-            return await this.SendAsync(_mediator, new RemoverUsuarioAreaInteresseCommand() { Id = usuarioAreaInteresseId });
+            return await this.SendAsync(_mediator, new RemoverUsuarioAreaInteresseCommand() { 
+                UsuarioId = usuarioId, 
+                AreaInteresseId = areaInteresseId 
+            });
         }
 
         [HttpGet("selecionar-areas-interesse-usuario/{usuarioId}")]

@@ -53,6 +53,7 @@ namespace ms_usuario.Extensions
         public static LoginCommandResponse ToLoginResponse
         (
             this LoginCommand request,
+            List<AreaInteresse> areaInteresseMany,
             Usuario usuario
         )
         {
@@ -72,6 +73,8 @@ namespace ms_usuario.Extensions
                 Foto = usuario.Perfil.Foto,
                 Hobbie = usuario.Perfil.Hobbie,
                 SociedadeId = usuario.SociedadeId,
+                UsuarioAreaInteresses = areaInteresseMany,
+               // UsuarioConquistas = usuario.UsuarioConquistas
             };
         }
 

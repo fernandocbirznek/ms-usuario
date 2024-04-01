@@ -7,12 +7,13 @@ namespace ms_usuario.Features.UsuarioAreaInteresseFeature.Commands
 {
     public class RemoverUsuarioAreaInteresseCommand : IRequest<RemoverUsuarioAreaInteresseCommandResponse>
     {
-        public long Id { get; set; }
+        public long UsuarioId { get; set; }
+        public long AreaInteresseId { get; set; }
     }
 
     public class RemoverUsuarioAreaInteresseCommandResponse
     {
-        public long Id { get; set; }
+        public long UsuarioId { get; set; }
     }
 
     public class RemoverUsuarioAreaInteresseCommandHandler : IRequestHandler<RemoverUsuarioAreaInteresseCommand, RemoverUsuarioAreaInteresseCommandResponse>
@@ -36,7 +37,13 @@ namespace ms_usuario.Features.UsuarioAreaInteresseFeature.Commands
             if (request is null)
                 throw new ArgumentNullException(MessageHelper.NullFor<RemoverUsuarioAreaInteresseCommand>());
 
-            UsuarioAreaInteresse usuarioAreaInteresse = await _repository.GetFirstAsync(item => item.Id.Equals(request.Id), cancellationToken);
+            UsuarioAreaInteresse usuarioAreaInteresse = await 
+                _repository
+                    .GetFirstAsync
+                    (
+                        item => item.UsuarioId.Equals(request.UsuarioId) && item.AreaInteresseId.Equals(request.AreaInteresseId), 
+                        cancellationToken
+                    );
 
             Validator(usuarioAreaInteresse);
 
@@ -44,7 +51,7 @@ namespace ms_usuario.Features.UsuarioAreaInteresseFeature.Commands
             await _repository.SaveChangesAsync(cancellationToken);
 
             RemoverUsuarioAreaInteresseCommandResponse response = new RemoverUsuarioAreaInteresseCommandResponse();
-            response.Id = usuarioAreaInteresse.Id;
+            response.UsuarioId = usuarioAreaInteresse.UsuarioId;
 
             return response;
         }
