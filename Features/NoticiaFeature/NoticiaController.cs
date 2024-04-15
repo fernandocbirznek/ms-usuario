@@ -55,5 +55,11 @@ namespace ms_usuario.Features.NoticiaFeature
         {
             return await this.SendAsync(_mediator, new SelecionarNoticiaManyHomeQuery());
         }
+
+        [HttpGet("selecionar-noticias-sistema")]
+        public async Task<ActionResult> GetMayNoticia()
+        {
+            return await this.SendAsync(_mediator, new SelecionarManyNoticiaFiltersQuery());
+        }
     }
 }

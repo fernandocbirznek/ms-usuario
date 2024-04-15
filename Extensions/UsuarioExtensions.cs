@@ -31,13 +31,13 @@ namespace ms_usuario.Extensions
             Usuario usuario
         )
         {
-            string salt = CreateSalt();
+            //string salt = CreateSalt();
             usuario.Nome = request.Nome;
             usuario.Email = request.Email;
-            usuario.Senha = CriptografarSenha(request.Senha, salt);
-            usuario.Salt = salt;
+            //usuario.Senha = CriptografarSenha(request.Senha, salt);
+            //usuario.Salt = salt;
             usuario.TipoUsuario = request.TipoUsuario;
-            usuario.SociedadeId = request.SociedadeId;
+            //usuario.SociedadeId = request.SociedadeId;
             usuario.DataAtualizacao = DateTime.Now;
         }
 

@@ -11,7 +11,6 @@ namespace ms_usuario.Features.UsuarioFeature.Commands
         public long Id { get; set; }
         public string Nome { get; set; }
         public string Email { get; set; }
-        public string Senha { get; set; }
         public int TipoUsuario { get; set; }
         public long? SociedadeId { get; set; }
     }
@@ -50,6 +49,8 @@ namespace ms_usuario.Features.UsuarioFeature.Commands
             Usuario usuario = await GetFirstAsync(request, cancellationToken);
             request.ToDomain(usuario);
 
+            //TODO, quando tiver sociedade precisa atualizar valor
+
             await _repository.UpdateAsync(usuario);
             await _repository.SaveChangesAsync(cancellationToken);
 
@@ -67,12 +68,10 @@ namespace ms_usuario.Features.UsuarioFeature.Commands
         {
             if (request.Id <= 0) throw new ArgumentNullException(MessageHelper.NullFor<AtualizarUsuarioCommand>(item => item.Id));
             if (String.IsNullOrEmpty(request.Nome)) throw new ArgumentNullException(MessageHelper.NullFor<AtualizarUsuarioCommand>(item => item.Nome));
-            if (String.IsNullOrEmpty(request.Senha)) throw new ArgumentNullException(MessageHelper.NullFor<AtualizarUsuarioCommand>(item => item.Senha));
             if (String.IsNullOrEmpty(request.Email)) throw new ArgumentNullException(MessageHelper.NullFor<AtualizarUsuarioCommand>(item => item.Email));
             if (request.TipoUsuario <= 0) throw new ArgumentNullException(MessageHelper.NullFor<AtualizarUsuarioCommand>(item => item.TipoUsuario));
             if (!(await ExistsAsync(request, cancellationToken))) throw new ArgumentNullException("Usuario não encontrado");
             if (await ExistsEmailAsync(request, cancellationToken)) throw new ArgumentNullException("Email já cadastrado");
-            if (!await ExistsSociedadeAsync(request, cancellationToken)) throw new ArgumentNullException("Sociedade não existe");
         }
 
         private async Task<Usuario> GetFirstAsync

@@ -5,17 +5,12 @@ using ms_usuario.Interface;
 
 namespace ms_usuario.Features.UsuarioFeature.Commands
 {
-    public class RemoverUsuarioCommand : IRequest<RemoverUsuarioCommandResponse>
+    public class RemoverUsuarioCommand : IRequest<long>
     {
         public long Id { get; set; }
     }
 
-    public class RemoverUsuarioCommandResponse
-    {
-        public long Id { get; set; }
-    }
-
-    public class RemoverUsuarioCommandHandler : IRequestHandler<RemoverUsuarioCommand, RemoverUsuarioCommandResponse>
+    public class RemoverUsuarioCommandHandler : IRequestHandler<RemoverUsuarioCommand, long>
     {
         private readonly IRepository<Usuario> _repository;
 
@@ -27,7 +22,7 @@ namespace ms_usuario.Features.UsuarioFeature.Commands
             _repository = repository;
         }
 
-        public async Task<RemoverUsuarioCommandResponse> Handle
+        public async Task<long> Handle
         (
             RemoverUsuarioCommand request,
             CancellationToken cancellationToken
@@ -43,10 +38,7 @@ namespace ms_usuario.Features.UsuarioFeature.Commands
             await _repository.RemoveAsync(usuario);
             await _repository.SaveChangesAsync(cancellationToken);
 
-            RemoverUsuarioCommandResponse response = new RemoverUsuarioCommandResponse();
-            response.Id = usuario.Id;
-
-            return response;
+            return usuario.Id;
         }
 
         private async Task Validator
