@@ -15,6 +15,7 @@ namespace ms_usuario.Features.NoticiaFeature.Queries
         public string Titulo { get; set; }
         public string Resumo { get; set; }
         public string Conteudo { get; set; }
+        public long Favoritado { get; set; }
         public long UsuarioCadastroId { get; set; }
         public string UsuarioCadastroNome { get; set; }
         public IEnumerable<AreaInteresse> AreaInteresseMany { get; set; }
@@ -67,6 +68,7 @@ namespace ms_usuario.Features.NoticiaFeature.Queries
                 response.Titulo = noticia.Titulo;
                 response.Resumo = noticia.Resumo;
                 response.Conteudo = noticia.Conteudo;
+                response.Favoritado = noticia.Favoritado;
                 response.AreaInteresseMany = noticiaAreaInteresse;
                 response.DataCadastro = noticia.DataCadastro;
                 response.DataAtualizacao = noticia.DataAtualizacao;

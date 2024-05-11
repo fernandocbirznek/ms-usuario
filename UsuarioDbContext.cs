@@ -16,6 +16,7 @@ namespace ms_usuario
         public DbSet<Usuario> Usuario { get; set; }
         public DbSet<UsuarioAreaInteresse> UsuarioAreaInteresse { get; set; }
         public DbSet<UsuarioConquistas> UsuarioConquistas { get; set; }
+        public DbSet<UsuarioNoticiaFavoritado> UsuarioNoticiaFavoritado { get; set; }
         public DbSet<UsuarioPerfil> UsuarioPerfil { get; set; }
 
         public DbConnection Connection => base.Database.GetDbConnection();

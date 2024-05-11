@@ -1,3 +1,4 @@
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ms_usuario;
 using ms_usuario.Domains;
@@ -35,6 +36,7 @@ builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(Noticia
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(Usuario).Assembly));
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(UsuarioAreaInteresse).Assembly));
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(UsuarioConquistas).Assembly));
+builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(UsuarioNoticiaFavoritado).Assembly));
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(UsuarioPerfil).Assembly));
 
 var app = builder.Build();
