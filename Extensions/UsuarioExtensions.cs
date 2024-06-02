@@ -78,6 +78,34 @@ namespace ms_usuario.Extensions
             };
         }
 
+        public static LoginAutomaticoCommandResponse ToLoginAutomaticoResponse
+        (
+            this LoginAutomaticoCommand request,
+            List<AreaInteresse> areaInteresseMany,
+            Usuario usuario
+        )
+        {
+            return new()
+            {
+                Id = usuario.Id,
+                Nome = usuario.Nome,
+                Email = usuario.Email,
+                TipoUsuario = usuario.TipoUsuario,
+                ComentarioForum = usuario.ComentarioForum,
+                TopicoForum = usuario.TopicoForum,
+                ComentarioAula = usuario.ComentarioAula,
+                CurtirAula = usuario.CurtirAula,
+                NoticiaVisualizada = usuario.NoticiaVisualizada,
+                UsuarioPerfilId = usuario.PerfilId,
+                DataNascimento = usuario.Perfil.DataNascimento,
+                Foto = usuario.Perfil.Foto,
+                Hobbie = usuario.Perfil.Hobbie,
+                SociedadeId = usuario.SociedadeId,
+                UsuarioAreaInteresses = areaInteresseMany,
+                // UsuarioConquistas = usuario.UsuarioConquistas
+            };
+        }
+
         private static string CriptografarSenha(string senha, string salt)
         {
             return Sha256(senha + salt);

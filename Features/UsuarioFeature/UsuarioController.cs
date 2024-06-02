@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ms_usuario.Extensions;
 using ms_usuario.Features.UsuarioFeature.Commands;
@@ -27,6 +29,13 @@ namespace ms_usuario.Features.UsuarioFeature
         [HttpPost("login")]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> Post(LoginCommand request)
+        {
+            return await this.SendAsync(_mediator, request);
+        }
+
+        [HttpPost("login-automatico")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult> Post(LoginAutomaticoCommand request)
         {
             return await this.SendAsync(_mediator, request);
         }

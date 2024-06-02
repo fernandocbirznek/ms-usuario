@@ -51,8 +51,7 @@ namespace ms_usuario.Features.UsuarioPerfilFeature.Commands
             UsuarioPerfil usuarioPerfil = await GetFirstAsync(request, cancellationToken);
             usuarioPerfil.Hobbie = request.Hobbie;
             usuarioPerfil.DataNascimento = request.DataNascimento;
-
-                usuarioPerfil.Foto = request.Foto;
+            usuarioPerfil.Foto = request.Foto;
 
             await _repository.UpdateAsync(usuarioPerfil);
             await _repository.SaveChangesAsync(cancellationToken);
