@@ -19,6 +19,12 @@ namespace ms_usuario.Features.NoticiaFeature.Commands
     {
         public long Id { get; set; }
         public DateTime DataCadastro { get; set; }
+
+        public string Titulo { get; set; }
+        public string Resumo { get; set; }
+        public string Conteudo { get; set; }
+        public long UsuarioCadastroId { get; set; }
+        public IEnumerable<long>? AreaInteresseMany { get; set; }
     }
 
     public class InserirNoticiaHandler : IRequestHandler<InserirNoticiaCommand, InserirNoticiaCommandResponse>
@@ -69,6 +75,12 @@ namespace ms_usuario.Features.NoticiaFeature.Commands
             InserirNoticiaCommandResponse response = new InserirNoticiaCommandResponse();
             response.DataCadastro = noticia.DataCadastro;
             response.Id = noticia.Id;
+
+            response.AreaInteresseMany = request.AreaInteresseMany;
+            response.Titulo = request.Titulo;
+            response.Resumo = request.Resumo;
+            response.Conteudo = request.Conteudo;
+            response.UsuarioCadastroId = response.UsuarioCadastroId;
 
             return response;
         }

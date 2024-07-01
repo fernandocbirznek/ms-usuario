@@ -15,6 +15,8 @@ namespace ms_usuario.Features.AreaInteresseFeature.Commands
     {
         public long Id { get; set; }
         public DateTime DataCadastro { get; set; }
+
+        public string Nome { get; set; }
     }
 
     public class InserirAreaInteresseHandler : IRequestHandler<InserirAreaInteresseCommand, InserirAreaInteresseCommandResponse>
@@ -48,6 +50,8 @@ namespace ms_usuario.Features.AreaInteresseFeature.Commands
             InserirAreaInteresseCommandResponse response = new InserirAreaInteresseCommandResponse();
             response.DataCadastro = areaInteresse.DataCadastro;
             response.Id = areaInteresse.Id;
+
+            response.Nome = areaInteresse.Nome;
 
             return response;
         }

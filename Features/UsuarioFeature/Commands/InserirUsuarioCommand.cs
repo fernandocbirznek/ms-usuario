@@ -16,6 +16,7 @@ namespace ms_usuario.Features.UsuarioFeature.Commands
     public class InserirUsuarioCommandResponse
     {
         public long Id { get; set; }
+        public int TipoUsuario { get; set; }
         public DateTime DataCadastro { get; set; }
     }
 
@@ -49,6 +50,7 @@ namespace ms_usuario.Features.UsuarioFeature.Commands
 
             InserirUsuarioCommandResponse response = new InserirUsuarioCommandResponse();
             response.DataCadastro = usuario.DataCadastro;
+            response.TipoUsuario = usuario.TipoUsuario;
             response.Id = usuario.Id;
 
             return response;

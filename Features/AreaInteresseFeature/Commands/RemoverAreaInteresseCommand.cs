@@ -5,17 +5,12 @@ using ms_usuario.Interface;
 
 namespace ms_usuario.Features.AreaInteresseFeature.Commands
 {
-    public class RemoverAreaInteresseCommand : IRequest<RemoverAreaInteresseCommandResponse>
+    public class RemoverAreaInteresseCommand : IRequest<long>
     {
         public long Id { get; set; }
     }
 
-    public class RemoverAreaInteresseCommandResponse
-    {
-        public long Id { get; set; }
-    }
-
-    public class RemoverAreaInteresseCommandHandler : IRequestHandler<RemoverAreaInteresseCommand, RemoverAreaInteresseCommandResponse>
+    public class RemoverAreaInteresseCommandHandler : IRequestHandler<RemoverAreaInteresseCommand, long>
     {
         private readonly IRepository<AreaInteresse> _repository;
 
@@ -27,7 +22,7 @@ namespace ms_usuario.Features.AreaInteresseFeature.Commands
             _repository = repository;
         }
 
-        public async Task<RemoverAreaInteresseCommandResponse> Handle
+        public async Task<long> Handle
         (
             RemoverAreaInteresseCommand request,
             CancellationToken cancellationToken
@@ -43,10 +38,7 @@ namespace ms_usuario.Features.AreaInteresseFeature.Commands
             await _repository.RemoveAsync(areaInteresse);
             await _repository.SaveChangesAsync(cancellationToken);
 
-            RemoverAreaInteresseCommandResponse response = new RemoverAreaInteresseCommandResponse();
-            response.Id = areaInteresse.Id;
-
-            return response;
+            return areaInteresse.Id;
         }
 
         private async Task Validator

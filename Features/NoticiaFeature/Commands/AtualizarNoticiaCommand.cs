@@ -17,8 +17,15 @@ namespace ms_usuario.Features.NoticiaFeature.Commands
 
     public class AtualizarNoticiaCommandResponse
     {
+        public long Id { get; set; }
+        public DateTime DataCadastro { get; set; }
         public DateTime DataAtualizacao { get; set; }
+       
         public IEnumerable<AreaInteresse> AreaInteresseMany { get; set; }
+        public string Titulo { get; set; }
+        public string Resumo { get; set; }
+        public string Conteudo { get; set; }
+        public long UsuarioCadastroId { get; set; }
     }
 
     public class AtualizarNoticiaHandler : IRequestHandler<AtualizarNoticiaCommand, AtualizarNoticiaCommandResponse>
@@ -94,8 +101,15 @@ namespace ms_usuario.Features.NoticiaFeature.Commands
             }
 
             AtualizarNoticiaCommandResponse response = new AtualizarNoticiaCommandResponse();
+            response.Id = request.Id;
+            response.DataCadastro = noticia.DataCadastro;
             response.DataAtualizacao = noticia.DataAtualizacao;
+
             response.AreaInteresseMany = areaInteresseResponse;
+            response.Titulo = request.Titulo;
+            response.Resumo = request.Resumo;
+            response.Conteudo = request.Conteudo;
+            response.UsuarioCadastroId = response.UsuarioCadastroId;
 
             return response;
         }
