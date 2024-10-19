@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using ms_usuario.Domains;
 using ms_usuario.Extensions;
+using ms_usuario.Features.NoticiaFeature.Commands;
+using ms_usuario.Features.UsuarioPerfilFeature.Commands;
 using ms_usuario.Helpers;
 using ms_usuario.Interface;
 
@@ -11,6 +13,10 @@ namespace ms_usuario.Features.UsuarioFeature.Commands
         public string Nome { get; set; }
         public string Email { get; set; }
         public string Senha { get; set; }
+
+        public DateTime? DataNascimento { get; set; }
+        public Byte[]? Foto { get; set; }
+        public string? Hobbie { get; set; }
     }
 
     public class InserirUsuarioCommandResponse
@@ -22,13 +28,17 @@ namespace ms_usuario.Features.UsuarioFeature.Commands
 
     public class InserirUsuarioHandler : IRequestHandler<InserirUsuarioCommand, InserirUsuarioCommandResponse>
     {
+        private IMediator _mediator;
+
         private readonly IRepository<Usuario> _repository;
 
         public InserirUsuarioHandler
         (
+            IMediator mediator,
             IRepository<Usuario> repository
         )
         {
+            _mediator = mediator;
             _repository = repository;
         }
 
@@ -52,6 +62,17 @@ namespace ms_usuario.Features.UsuarioFeature.Commands
             response.DataCadastro = usuario.DataCadastro;
             response.TipoUsuario = usuario.TipoUsuario;
             response.Id = usuario.Id;
+
+            await _mediator.Send
+            (
+                new InserirUsuarioPerfilCommand
+                {
+                    DataNascimento = request.DataNascimento,
+                    Foto = request.Foto,
+                    Hobbie = request.Hobbie,
+                    UsuarioId = usuario.Id
+                }
+            );
 
             return response;
         }
