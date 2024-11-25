@@ -1,25 +1,24 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-#Depending on the operating system of the host machines(s) that will build or run the containers, the image specified in the FROM statement may need to be changed.
-#For more information, please see https://aka.ms/containercompat
-
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 443
-
+# Etapa 1: Build
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-WORKDIR /src
-COPY ["ms-usuario.csproj", "."]
-RUN dotnet restore "./ms-usuario.csproj"
-COPY . .
-WORKDIR "/src/."
-RUN dotnet build "ms-usuario.csproj" -c Release -o /app/build
-
-FROM build AS publish
-RUN dotnet publish "ms-usuario.csproj" -c Release -o /app/publish /p:UseAppHost=false
-
-FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+
+# Copiar todos os arquivos do projeto
+COPY . .
+
+# Restaurar dependências e buildar a aplicação
+RUN dotnet restore ms-usuario.sln
+RUN dotnet publish ms-usuario.sln -c Release -o out
+
+# Etapa 2: Runtime
+FROM mcr.microsoft.com/dotnet/aspnet:6.0
+WORKDIR /app
+
+# Copiar os arquivos gerados no build
+COPY --from=build /app/out .
+
+# Expor a porta usada pela aplicação
+EXPOSE 5002
+EXPOSE 5003
+
+# Comando de inicialização
 ENTRYPOINT ["dotnet", "ms-usuario.dll"]

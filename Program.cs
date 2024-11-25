@@ -20,6 +20,15 @@ builder.Services.AddCors(options =>
                       });
 });
 
+// Configurar explicitamente a porta HTTPS
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(5002); // Porta HTTP
+    //options.ListenAnyIP(5001, listenOptions => listenOptions.UseHttps()); // Porta HTTPS (opcional)
+});
+
+builder.WebHost.UseUrls("http://*:5002");
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -43,16 +52,17 @@ var app = builder.Build();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.UseRouting();
+app.UseSwagger();
+
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
+    c.RoutePrefix = "swagger";  // Isso vai permitir acessar o Swagger via http://localhost:8100/
+});
 
 app.UseCors(MyAllowSpecificOrigins);
 
-app.UseHttpsRedirection();
-app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllers();
