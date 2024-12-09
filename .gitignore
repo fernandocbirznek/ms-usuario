@@ -1,0 +1,16 @@
+# Ignorar pastas do Visual Studio e configurações locais
+.vs/
+
+# Ignorar saídas de build
+bin/
+obj/
+
+# Ignorar arquivos de cache e temporários
+*.user
+*.suo
+*.log
+*.tmp
+*.pdb
+
+# Ignorar pacotes NuGet baixados
+packages/
