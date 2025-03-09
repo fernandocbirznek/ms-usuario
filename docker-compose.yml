@@ -25,5 +25,6 @@ services:
       - app-network
 
 networks:
-  app-network:
-    driver: bridge
+  default:
+    name: rede-compartilhada
+    external: true
