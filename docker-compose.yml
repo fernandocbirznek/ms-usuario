@@ -11,7 +11,7 @@ services:
     environment:
       - ConnectionStrings__DbContext=Host=postgres;Port=5432;Pooling=true;Database=site-fisica;User Id=postgres;Password=admin
     networks:
-      - app-network
+      - default
 
   postgres:
     image: postgres:latest
@@ -22,7 +22,7 @@ services:
     ports:
       - "5434:5434"
     networks:
-      - app-network
+      - default
 
 networks:
   default:
