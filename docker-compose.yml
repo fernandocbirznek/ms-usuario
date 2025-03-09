@@ -4,7 +4,7 @@ services:
   app:
     build: .
     ports:
-      - "8102:5003" # Porta para acessar o aplicativo no host
+      - "8102:5002" # Porta para acessar o aplicativo no host
       #- "8101:5001" # Porta HTTPS no host para o container
     depends_on:
       - postgres

@@ -23,7 +23,7 @@ builder.Services.AddCors(options =>
 // Configurar explicitamente a porta HTTPS
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenAnyIP(5003); // Porta HTTP
+    options.ListenAnyIP(5002); // Porta HTTP
     //options.ListenAnyIP(5001, listenOptions => listenOptions.UseHttps()); // Porta HTTPS (opcional)
 });
 
