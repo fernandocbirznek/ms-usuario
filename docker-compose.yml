@@ -4,12 +4,12 @@ services:
   app:
     build: .
     ports:
-      - "8102:5002" # Porta para acessar o aplicativo no host
+      - "8102:5003" # Porta para acessar o aplicativo no host
       #- "8101:5001" # Porta HTTPS no host para o container
     depends_on:
       - postgres
     environment:
-      - ConnectionStrings__DbContext=Host=postgres;Port=5432;Pooling=true;Database=site-fisica;User Id=postgres;Password=admin
+      - ConnectionStrings__DbContext=Host=ms-usuario-postgres-1;Port=5434;Pooling=true;Database=site-fisica;User Id=postgres;Password=admin
     networks:
       - default
 
