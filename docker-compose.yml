@@ -1,30 +1,44 @@
+# version: '3.8'
+
+# services:
+#   app:
+#     build: .
+#     ports:
+#       - "8102:5002" # Porta para acessar o aplicativo no host
+#       #- "8101:5001" # Porta HTTPS no host para o container
+#     depends_on:
+#       - postgres
+#     environment:
+#       - ConnectionStrings__DbContext=Host=ms-usuario-postgres-1;Port=5432;Pooling=true;Database=site-fisica;User Id=postgres;Password=admin
+#     networks:
+#       - default
+
+#   postgres:
+#     image: postgres:latest
+#     environment:
+#       POSTGRES_USER: postgres
+#       POSTGRES_PASSWORD: admin
+#       POSTGRES_DB: site-fisica
+#     ports:
+#       - "5432:5432"
+#     networks:
+#       - default
+
+# networks:
+#   default:
+#     name: rede-compartilhada
+#     external: true
 version: '3.8'
 
 services:
-  app:
+  ms-usuario:
     build: .
+    container_name: ms-usuario
     ports:
-      - "8102:5002" # Porta para acessar o aplicativo no host
-      #- "8101:5001" # Porta HTTPS no host para o container
-    depends_on:
-      - postgres
-    environment:
-      - ConnectionStrings__DbContext=Host=ms-usuario-postgres-1;Port=5434;Pooling=true;Database=site-fisica;User Id=postgres;Password=admin
+      - "5002:80"
     networks:
-      - default
-
-  postgres:
-    image: postgres:latest
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: site-fisica
-    ports:
-      - "5434:5434"
-    networks:
-      - default
+      - rede-compartilhada
 
 networks:
-  default:
-    name: rede-compartilhada
+  rede-compartilhada:
     external: true
