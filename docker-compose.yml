@@ -34,10 +34,12 @@ services:
   ms-usuario:
     build: .
     container_name: ms-usuario
+    restart: always
     ports:
       - "5002:80"
     networks:
       - rede-compartilhada
+    entrypoint: ["/bin/sh", "-c", "until nc -z meu-postgres 5432; do echo Waiting for database; sleep 2; done; dotnet ms-usuario.dll"]
 
 networks:
   rede-compartilhada:
