@@ -1,13 +1,13 @@
-version: '3.8'
+# version: '3.8'
 
-services:
-  ms-usuario:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-      - ConnectionStrings__DefaultConnection=Host=meu-postgres;Port=5432;Database=site-fisica;Username=postgres;Password=admin
-    networks:
-      - rede-compartilhada
+# services:
+#   ms-usuario:
+#     environment:
+#       - ASPNETCORE_ENVIRONMENT=Production
+#       - ConnectionStrings__DefaultConnection=Host=meu-postgres;Port=5432;Database=site-fisica;Username=postgres;Password=admin
+#     networks:
+#       - rede-compartilhada
 
-networks:
-  rede-compartilhada:
-    external: true
+# networks:
+#   rede-compartilhada:
+#     external: true
