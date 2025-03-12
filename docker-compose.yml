@@ -22,13 +22,11 @@ services:
     build: .
     ports:
       - "8102:5002"
-    depends_on:
-      - postgres
     environment:
-      - ConnectionStrings__DbContext=Host=104.41.24.46;Port=5432;Pooling=true;Database=site-fisica;User Id=postgres;Password=admin
+      - ConnectionStrings__DbContext=Host=ms-aula-postgres;Port=5432;Pooling=true;Database=site-fisica;User Id=postgres;Password=admin
     networks:
       - app-network
 
 networks:
   app-network:
-    driver: bridge
+    external: true  # Usa a mesma rede do ms-aula
