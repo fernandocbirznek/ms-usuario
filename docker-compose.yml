@@ -18,36 +18,33 @@
 version: '3.8'
 
 services:
-  ms-usuario:
+  app:
     build: .
-    container_name: ms-usuario
     ports:
-      - "5000:5000"
-    networks:
-      - rede-compartilhada
-    environment:
-      - DB_HOST=ms-usuario-db
-      - DB_NAME=usuario_db
-      - DB_USER=usuario_user
-      - DB_PASS=usuario_pass
+      - "8102:5002" # Porta para acessar o aplicativo no host
     depends_on:
-      - ms-usuario-db
-
-  ms-usuario-db:
-    image: postgres:latest
-    container_name: ms-usuario-db
+      - postgres
     environment:
-      POSTGRES_USER: usuario_user
-      POSTGRES_PASSWORD: usuario_pass
-      POSTGRES_DB: usuario_db
+      - ConnectionStrings__DbContext=Host=postgres;Port=5432;Pooling=true;Database=site-fisica;User Id=postgres;Password=admin
+    networks:
+      - app-network
+
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: site-fisica
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
     volumes:
       - ms-usuario-db-data:/var/lib/postgresql/data
-    networks:
-      - rede-compartilhada
 
 networks:
-  rede-compartilhada:
-    external: true
+  app-network:
+    driver: bridge
 
 volumes:
   ms-usuario-db-data:
