@@ -29,4 +29,4 @@ services:
 
 networks:
   app-network:
-    external: true  # Usa a mesma rede do ms-aula
+    driver: bridge
