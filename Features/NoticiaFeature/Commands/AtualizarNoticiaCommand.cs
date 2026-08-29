@@ -12,6 +12,7 @@ namespace ms_usuario.Features.NoticiaFeature.Commands
         public string Resumo { get; set; }
         public string Conteudo { get; set; }
         public long UsuarioCadastroId { get; set; }
+        public long? SociedadeId { get; set; }
         public IEnumerable<long>? AreaInteresseMany { get; set; }
     }
 
@@ -26,6 +27,7 @@ namespace ms_usuario.Features.NoticiaFeature.Commands
         public string Resumo { get; set; }
         public string Conteudo { get; set; }
         public long UsuarioCadastroId { get; set; }
+        public long? SociedadeId { get; set; }
     }
 
     public class AtualizarNoticiaHandler : IRequestHandler<AtualizarNoticiaCommand, AtualizarNoticiaCommandResponse>
@@ -61,6 +63,7 @@ namespace ms_usuario.Features.NoticiaFeature.Commands
             noticia.Titulo = request.Titulo;
             noticia.Resumo = request.Resumo;
             noticia.Conteudo = request.Conteudo;
+            noticia.SociedadeId = request.SociedadeId;
             noticia.DataAtualizacao = DateTime.Now;
 
             await _repository.UpdateAsync(noticia);
@@ -110,6 +113,7 @@ namespace ms_usuario.Features.NoticiaFeature.Commands
             response.Resumo = request.Resumo;
             response.Conteudo = request.Conteudo;
             response.UsuarioCadastroId = response.UsuarioCadastroId;
+            response.SociedadeId = response.SociedadeId;
 
             return response;
         }

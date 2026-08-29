@@ -23,6 +23,8 @@ namespace ms_usuario
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.SetupSociedadeTable();
+            modelBuilder.SetupUsuarioSociedadeTable();
             modelBuilder.SetupUsuarioTable();
         }
     }

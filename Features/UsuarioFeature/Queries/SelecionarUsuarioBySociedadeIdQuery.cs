@@ -50,9 +50,10 @@ namespace ms_usuario.Features.UsuarioFeature.Queries
             if (request is null)
                 throw new ArgumentNullException(MessageHelper.NullFor<SelecionarUsuarioBySociedadeIdQuery>());
 
+            //TODO REMOVER OU TROCAR PARA PEGAR DE USUARIOSOCIEDADE
             IEnumerable<Usuario> usuarioMany = await _repository.GetAsync
                 (
-                    item => item.SociedadeId.Equals(request.Id),
+                    item => item.Id.Equals(request.Id),
                     cancellationToken,
                     item => item.Perfil,
                     item => item.UsuarioConquistas,
@@ -77,7 +78,6 @@ namespace ms_usuario.Features.UsuarioFeature.Queries
                 response.TopicoForum = usuario.TopicoForum;
                 response.DataNascimento = usuario.Perfil.DataNascimento;
                 response.Hobbie = usuario.Perfil.Hobbie;
-                response.SociedadeId = usuario.SociedadeId;
                 response.Foto = usuario.Perfil.Foto;
                 response.PerfilId = usuario.PerfilId;
                 response.CurtirAula = usuario.CurtirAula;

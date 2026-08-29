@@ -11,6 +11,7 @@ namespace ms_usuario.Extensions
             {
                 Nome = request.Nome,
                 Descricao = request.Descricao,
+                UsuarioLiderId = request.UsuarioLiderId,
                 DataCadastro = DateTime.Now
             };
         }

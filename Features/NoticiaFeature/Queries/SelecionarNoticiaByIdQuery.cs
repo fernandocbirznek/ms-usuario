@@ -17,6 +17,7 @@ namespace ms_usuario.Features.NoticiaFeature.Queries
         public string Conteudo { get; set; }
         public long Favoritado {  get; set; }
         public long UsuarioCadastroId { get; set; }
+        public long? SociedadeId { get; set; }
         public IEnumerable<NoticiaAreaInteresse> noticiaAreaInteresseMany { get; set; }
     }
 
@@ -54,6 +55,7 @@ namespace ms_usuario.Features.NoticiaFeature.Queries
             response.DataCadastro = noticia.DataCadastro;
             response.DataAtualizacao = noticia.DataAtualizacao;
             response.Id = noticia.Id;
+            response.SociedadeId = noticia.SociedadeId;
 
             return response;
         }

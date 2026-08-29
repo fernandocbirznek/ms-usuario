@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ms_usuario;
@@ -11,9 +12,11 @@ using ms_usuario;
 namespace ms_usuario.Migrations
 {
     [DbContext(typeof(UsuarioDbContext))]
-    partial class UsuarioDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250721212720_TabelaSociedadeERelacoes")]
+    partial class TabelaSociedadeERelacoes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,7 +45,7 @@ namespace ms_usuario.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AreaInteresse", (string)null);
+                    b.ToTable("AreaInteresse");
                 });
 
             modelBuilder.Entity("ms_usuario.Domains.Conquistas", b =>
@@ -65,7 +68,7 @@ namespace ms_usuario.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Conquistas", (string)null);
+                    b.ToTable("Conquistas");
                 });
 
             modelBuilder.Entity("ms_usuario.Domains.Noticia", b =>
@@ -107,7 +110,7 @@ namespace ms_usuario.Migrations
 
                     b.HasIndex("SociedadeId");
 
-                    b.ToTable("Noticia", (string)null);
+                    b.ToTable("Noticia");
                 });
 
             modelBuilder.Entity("ms_usuario.Domains.NoticiaAreaInteresse", b =>
@@ -136,7 +139,7 @@ namespace ms_usuario.Migrations
 
                     b.HasIndex("NoticiaId");
 
-                    b.ToTable("NoticiaAreaInteresse", (string)null);
+                    b.ToTable("NoticiaAreaInteresse");
                 });
 
             modelBuilder.Entity("ms_usuario.Domains.Sociedade", b =>
@@ -170,7 +173,7 @@ namespace ms_usuario.Migrations
 
                     b.HasIndex("UsuarioLiderId");
 
-                    b.ToTable("Sociedade", (string)null);
+                    b.ToTable("Sociedade");
                 });
 
             modelBuilder.Entity("ms_usuario.Domains.Usuario", b =>
@@ -236,7 +239,7 @@ namespace ms_usuario.Migrations
 
                     b.HasIndex("SociedadeId");
 
-                    b.ToTable("Usuario", (string)null);
+                    b.ToTable("Usuario");
                 });
 
             modelBuilder.Entity("ms_usuario.Domains.UsuarioAreaInteresse", b =>
@@ -265,7 +268,7 @@ namespace ms_usuario.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("UsuarioAreaInteresse", (string)null);
+                    b.ToTable("UsuarioAreaInteresse");
                 });
 
             modelBuilder.Entity("ms_usuario.Domains.UsuarioConquistas", b =>
@@ -294,7 +297,7 @@ namespace ms_usuario.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("UsuarioConquistas", (string)null);
+                    b.ToTable("UsuarioConquistas");
                 });
 
             modelBuilder.Entity("ms_usuario.Domains.UsuarioNoticiaFavoritado", b =>
@@ -321,7 +324,7 @@ namespace ms_usuario.Migrations
 
                     b.HasIndex("NoticiaId");
 
-                    b.ToTable("UsuarioNoticiaFavoritado", (string)null);
+                    b.ToTable("UsuarioNoticiaFavoritado");
                 });
 
             modelBuilder.Entity("ms_usuario.Domains.UsuarioPerfil", b =>
@@ -349,7 +352,7 @@ namespace ms_usuario.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UsuarioPerfil", (string)null);
+                    b.ToTable("UsuarioPerfil");
                 });
 
             modelBuilder.Entity("ms_usuario.Domains.UsuarioSociedade", b =>
@@ -376,7 +379,7 @@ namespace ms_usuario.Migrations
 
                     b.HasIndex("SociedadeId");
 
-                    b.ToTable("UsuarioSociedade", (string)null);
+                    b.ToTable("UsuarioSociedade");
                 });
 
             modelBuilder.Entity("ms_usuario.Domains.Noticia", b =>

@@ -10,11 +10,17 @@ namespace ms_usuario.Features.SociedadeFeature.Commands
         public long Id { get; set; }
         public string Nome { get; set; }
         public string Descricao { get; set; }
+        public long UsuarioLiderId { get; set; }
     }
 
     public class AtualizarSociedadeCommandResponse
     {
+        public long Id { get; set; }
         public DateTime DataAtualizacao { get; set; }
+
+        public string Nome { get; set; }
+        public string Descricao { get; set; }
+        public long UsuarioLiderId { get; set; }
     }
 
     public class AtualizarSociedadeHandler : IRequestHandler<AtualizarSociedadeCommand, AtualizarSociedadeCommandResponse>
@@ -43,12 +49,17 @@ namespace ms_usuario.Features.SociedadeFeature.Commands
             Sociedade sociedade = await GetFirstAsync(request, cancellationToken);
             sociedade.Nome = request.Nome;
             sociedade.Descricao = request.Descricao;
+            sociedade.UsuarioLiderId = request.UsuarioLiderId;
 
             await _repository.UpdateAsync(sociedade);
             await _repository.SaveChangesAsync(cancellationToken);
 
             AtualizarSociedadeCommandResponse response = new AtualizarSociedadeCommandResponse();
             response.DataAtualizacao = sociedade.DataAtualizacao;
+            response.Id = request.Id;
+            response.Nome = request.Nome;
+            response.Descricao = request.Descricao;
+            response.UsuarioLiderId = request.UsuarioLiderId;
 
             return response;
         }
@@ -64,6 +75,7 @@ namespace ms_usuario.Features.SociedadeFeature.Commands
             if (String.IsNullOrEmpty(request.Descricao)) throw new ArgumentNullException(MessageHelper.NullFor<AtualizarSociedadeCommand>(item => item.Descricao));
             if (!(await ExistsAsync(request, cancellationToken))) throw new ArgumentNullException("Sociedade não encontrada");
             if (await ExistsNomeAsync(request, cancellationToken)) throw new ArgumentNullException("Sociedade já cadastrada");
+            if (request.UsuarioLiderId <= 0) throw new ArgumentNullException(MessageHelper.NullFor<AtualizarSociedadeCommand>(item => item.UsuarioLiderId));
         }
 
         private async Task<Sociedade> GetFirstAsync

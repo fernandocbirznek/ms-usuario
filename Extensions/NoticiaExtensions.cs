@@ -13,6 +13,7 @@ namespace ms_usuario.Extensions
                 Resumo = request.Resumo,
                 Conteudo = request.Conteudo,
                 UsuarioCadastroId = request.UsuarioCadastroId,
+                SociedadeId = request.SociedadeId,
                 DataCadastro = DateTime.Now
             };
         }

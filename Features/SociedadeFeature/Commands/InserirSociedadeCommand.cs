@@ -10,12 +10,17 @@ namespace ms_usuario.Features.SociedadeFeature.Commands
     {
         public string Nome { get; set; }
         public string Descricao { get; set; }
+        public long UsuarioLiderId { get; set; }
     }
 
     public class InserirSociedadeCommandResponse
     {
         public long Id { get; set; }
         public DateTime DataCadastro { get; set; }
+
+        public string Nome { get; set; }
+        public string Descricao { get; set; }
+        public long UsuarioLiderId { get; set; }
     }
 
     public class InserirSociedadeHandler : IRequestHandler<InserirSociedadeCommand, InserirSociedadeCommandResponse>
@@ -48,6 +53,9 @@ namespace ms_usuario.Features.SociedadeFeature.Commands
 
             InserirSociedadeCommandResponse response = new InserirSociedadeCommandResponse();
             response.DataCadastro = sociedade.DataCadastro;
+            response.UsuarioLiderId = sociedade.UsuarioLiderId;
+            response.Nome = sociedade.Nome;
+            response.Descricao = sociedade.Descricao;
             response.Id = sociedade.Id;
 
             return response;
@@ -61,6 +69,7 @@ namespace ms_usuario.Features.SociedadeFeature.Commands
         {
             if (String.IsNullOrEmpty(request.Nome)) throw new ArgumentNullException(MessageHelper.NullFor<InserirSociedadeCommand>(item => item.Nome));
             if (String.IsNullOrEmpty(request.Descricao)) throw new ArgumentNullException(MessageHelper.NullFor<InserirSociedadeCommand>(item => item.Descricao));
+            if (request.UsuarioLiderId <= 0) throw new ArgumentNullException(MessageHelper.NullFor<InserirSociedadeCommand>(item => item.UsuarioLiderId));
             if (await ExistsNomeAsync(request, cancellationToken)) throw new ArgumentNullException("Conquistas já cadastrado");
         }
 

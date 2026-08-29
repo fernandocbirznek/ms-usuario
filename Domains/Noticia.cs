@@ -8,5 +8,8 @@
         public long Favoritado { get; set; }
         public long UsuarioCadastroId { get; set; }
         public virtual ICollection<NoticiaAreaInteresse> NoticiaAreaInteresseMany { get; set; }
+
+        public long? SociedadeId { get; set; }
+        public virtual Sociedade Sociedade { get; set; }
     }
 }

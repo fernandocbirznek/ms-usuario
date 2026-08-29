@@ -72,7 +72,6 @@ namespace ms_usuario.Extensions
                 DataNascimento = usuario.Perfil.DataNascimento,
                 Foto = usuario.Perfil.Foto,
                 Hobbie = usuario.Perfil.Hobbie,
-                SociedadeId = usuario.SociedadeId,
                 UsuarioAreaInteresses = areaInteresseMany,
                // UsuarioConquistas = usuario.UsuarioConquistas
             };
@@ -100,7 +99,6 @@ namespace ms_usuario.Extensions
                 DataNascimento = usuario.Perfil.DataNascimento,
                 Foto = usuario.Perfil.Foto,
                 Hobbie = usuario.Perfil.Hobbie,
-                SociedadeId = usuario.SociedadeId,
                 UsuarioAreaInteresses = areaInteresseMany,
                 // UsuarioConquistas = usuario.UsuarioConquistas
             };

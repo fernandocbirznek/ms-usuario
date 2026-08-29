@@ -92,7 +92,6 @@ namespace ms_usuario.Features.UsuarioFeature.Queries
             response.TopicoForum = usuario.TopicoForum;
             response.DataNascimento = usuario.Perfil.DataNascimento;
             response.Hobbie = usuario.Perfil.Hobbie;
-            response.SociedadeId = usuario.SociedadeId;
             response.Foto = usuario.Perfil.Foto;
             response.PerfilId = usuario.PerfilId;
             response.CurtirAula = usuario.CurtirAula;

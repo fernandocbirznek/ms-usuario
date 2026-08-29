@@ -14,6 +14,18 @@ namespace ms_usuario.Features.SociedadeFeature.Queries
     {
         public string Nome { get; set; }
         public string Descricao { get; set; }
+        public long UsuarioLiderId { get; set; }
+        public List<NoticiaResponse> Noticias { get; set; }
+    }
+
+    public class NoticiaResponse : Entity
+    {
+        public string Titulo { get; set; }
+        public string Resumo { get; set; }
+        public string Conteudo { get; set; }
+        public long Favoritado { get; set; }
+        public long UsuarioCadastroId { get; set; }
+        public IEnumerable<NoticiaAreaInteresse> noticiaAreaInteresseMany { get; set; }
     }
 
     public class SelecionarSociedadeByIdQueryHandler : IRequestHandler<SelecionarSociedadeByIdQuery, SelecionarSociedadeByIdQueryResponse>
@@ -46,7 +58,20 @@ namespace ms_usuario.Features.SociedadeFeature.Queries
             response.Descricao = sociedade.Descricao;
             response.DataCadastro = sociedade.DataCadastro;
             response.DataAtualizacao = sociedade.DataAtualizacao;
+            response.UsuarioLiderId = sociedade.UsuarioLiderId;
             response.Id = sociedade.Id;
+            response.Noticias = sociedade.Noticias?
+                .Select(item => new NoticiaResponse
+                {
+                    Id = item.Id,
+                    Titulo = item.Titulo,
+                    Resumo = item.Resumo,
+                    Conteudo = item.Conteudo,
+                    Favoritado = item.Favoritado,
+                    UsuarioCadastroId = item.UsuarioCadastroId,
+                    noticiaAreaInteresseMany = item.NoticiaAreaInteresseMany
+                })
+                .ToList() ?? new List<NoticiaResponse>();
 
             return response;
         }
@@ -68,7 +93,9 @@ namespace ms_usuario.Features.SociedadeFeature.Queries
             return await _repository.GetFirstAsync
                 (
                     item => item.Id.Equals(request.Id),
-                    cancellationToken
+                    cancellationToken,
+                    item => item.Noticias,
+                    item => item.Noticias.Select(noticia => noticia.NoticiaAreaInteresseMany)
                 );
         }
     }

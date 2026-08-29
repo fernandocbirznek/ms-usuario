@@ -1,4 +1,6 @@
-﻿namespace ms_usuario.Domains
+﻿using ms_usuario.Domains.Enums;
+
+namespace ms_usuario.Domains
 {
     public class Usuario : Entity
     {
@@ -6,7 +8,7 @@
         public string Email { get; set; }
         public string Senha { get; set; }
         public string Salt { get; set; }
-        public int TipoUsuario { get; set; }
+        public TipoUsuarioEnum TipoUsuario { get; set; }
         public virtual ICollection<UsuarioAreaInteresse> UsuarioAreaInteresses { get; set; }
         public virtual ICollection<UsuarioConquistas> UsuarioConquistas { get; set; }
         public long ComentarioForum { get; set; }
@@ -28,13 +30,7 @@
             PerfilId = value is null ? 0 : value.Id;
         }
 
-        public long? SociedadeId { get; set; }
-        private Sociedade _Sociedade;
-        public virtual Sociedade Sociedade { get { return _Sociedade; } set { _Sociedade = value; SetSociedade(value); } }
-
-        private void SetSociedade(Sociedade value)
-        {
-            SociedadeId = value is null ? 0 : value.Id;
-        }
+        public virtual ICollection<UsuarioSociedade> UsuarioSociedades { get; set; }
+        public virtual ICollection<Sociedade> SociedadesLideradas { get; set; }
     }
 }

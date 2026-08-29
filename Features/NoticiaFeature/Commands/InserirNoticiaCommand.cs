@@ -12,6 +12,7 @@ namespace ms_usuario.Features.NoticiaFeature.Commands
         public string Resumo { get; set; }
         public string Conteudo { get; set; }
         public long UsuarioCadastroId { get; set; }
+        public long? SociedadeId { get; set; }
         public IEnumerable<long>? AreaInteresseMany { get; set; }
     }
 
@@ -24,6 +25,7 @@ namespace ms_usuario.Features.NoticiaFeature.Commands
         public string Resumo { get; set; }
         public string Conteudo { get; set; }
         public long UsuarioCadastroId { get; set; }
+        public long? SociedadeId { get; set; }
         public IEnumerable<long>? AreaInteresseMany { get; set; }
     }
 
@@ -81,6 +83,7 @@ namespace ms_usuario.Features.NoticiaFeature.Commands
             response.Resumo = request.Resumo;
             response.Conteudo = request.Conteudo;
             response.UsuarioCadastroId = response.UsuarioCadastroId;
+            response.SociedadeId = response.SociedadeId;
 
             return response;
         }

@@ -17,6 +17,7 @@ namespace ms_usuario.Features.NoticiaFeature.Queries
         public long Favoritado { get; set; }
         public long UsuarioCadastroId { get; set; }
         public string UsuarioCadastroNome { get; set; }
+        public long? SociedadeId { get; set; }
         public IEnumerable<AreaInteresse> AreaInteresseMany { get; set; }
     }
 
@@ -72,6 +73,7 @@ namespace ms_usuario.Features.NoticiaFeature.Queries
                 response.DataCadastro = noticia.DataCadastro;
                 response.DataAtualizacao = noticia.DataAtualizacao;
                 response.UsuarioCadastroId = noticia.UsuarioCadastroId;
+                response.SociedadeId = noticia.SociedadeId;
                 response.UsuarioCadastroNome = await GetUsuarioCadastroNomeAsync(noticia.UsuarioCadastroId, cancellationToken);
                 response.Id = noticia.Id;
                 responseMany.Add(response);

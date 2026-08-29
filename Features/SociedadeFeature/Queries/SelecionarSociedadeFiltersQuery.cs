@@ -13,6 +13,7 @@ namespace ms_usuario.Features.SociedadeFeature.Queries
     {
         public string Nome { get; set; }
         public string Descricao { get; set; }
+        public long UsuarioLiderId { get; set; }
     }
 
     public class SelecionarSociedadeFiltersQueryResponseHandler : IRequestHandler<SelecionarSociedadeFiltersQuery, IEnumerable<SelecionarSociedadeFiltersQueryResponse>>
@@ -47,6 +48,7 @@ namespace ms_usuario.Features.SociedadeFeature.Queries
                 response.Descricao = sociedade.Descricao;
                 response.DataCadastro = sociedade.DataCadastro;
                 response.DataAtualizacao = sociedade.DataAtualizacao;
+                response.UsuarioLiderId = sociedade.UsuarioLiderId;
                 response.Id = sociedade.Id;
                 responseMany.Add(response);
             }

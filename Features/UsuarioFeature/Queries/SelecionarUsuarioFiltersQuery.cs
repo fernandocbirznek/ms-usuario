@@ -101,7 +101,6 @@ namespace ms_usuario.Features.UsuarioFeature.Queries
                 response.DataNascimento = usuario.Perfil.DataNascimento;
                 response.Hobbie = usuario.Perfil.Hobbie;
                 response.Foto = usuario.Perfil.Foto;
-                response.SociedadeId = usuario.SociedadeId;
                 response.PerfilId = usuario.PerfilId;
                 response.CurtirAula = usuario.CurtirAula;
                 response.NoticiaVisualizada = usuario.NoticiaVisualizada;
