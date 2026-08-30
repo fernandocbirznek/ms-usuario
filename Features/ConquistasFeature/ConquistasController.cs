@@ -39,7 +39,7 @@ namespace ms_usuario.Features.ConquistasFeature
         }
 
         [HttpGet("selecionar-conquista/{conquistaId}")]
-        public async Task<ActionResult> GetForum(long conquistaId)
+        public async Task<ActionResult> GetConquista(long conquistaId)
         {
             return await this.SendAsync(_mediator, new SelecionarConquistasByIdQuery() { Id = conquistaId });
         }

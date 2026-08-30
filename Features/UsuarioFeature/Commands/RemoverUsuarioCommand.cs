@@ -33,7 +33,8 @@ namespace ms_usuario.Features.UsuarioFeature.Commands
 
             await Validator(request, cancellationToken);
 
-            Usuario usuario = await _repository.GetFirstAsync(item => item.Id.Equals(request.Id), cancellationToken);
+            Usuario usuario = await _repository.GetFirstAsync(item => item.Id.Equals(request.Id), cancellationToken)
+                ?? throw new ArgumentNullException("Usuário não encontrado");
 
             await _repository.RemoveAsync(usuario);
             await _repository.SaveChangesAsync(cancellationToken);

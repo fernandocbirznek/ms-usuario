@@ -38,7 +38,8 @@ namespace ms_usuario.Features.ConquistasFeature.Commands
 
             await Validator(request, cancellationToken);
 
-            Conquistas conquistas = await _repository.GetFirstAsync(item => item.Id.Equals(request.Id), cancellationToken);
+            Conquistas conquistas = await _repository.GetFirstAsync(item => item.Id.Equals(request.Id), cancellationToken)
+                ?? throw new ArgumentNullException("Conquista não encontrada");
 
             await _repository.RemoveAsync(conquistas);
             await _repository.SaveChangesAsync(cancellationToken);

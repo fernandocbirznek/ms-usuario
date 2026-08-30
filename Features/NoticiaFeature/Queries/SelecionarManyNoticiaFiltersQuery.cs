@@ -49,8 +49,9 @@ namespace ms_usuario.Features.NoticiaFeature.Queries
             if (request is null)
                 throw new ArgumentNullException(MessageHelper.NullFor<SelecionarManyNoticiaFiltersQuery>());
 
-            IEnumerable<Noticia> noticiaMany = await GetAsync(cancellationToken);
+            List<Noticia> noticiaMany = (await GetAsync(cancellationToken)).ToList();
             IEnumerable<AreaInteresse> areaInteresseMany = await GetAreaInteresseAsync(cancellationToken);
+            IReadOnlyDictionary<long, string> usuarioCadastroNomes = await GetUsuarioCadastroNomesAsync(noticiaMany, cancellationToken);
 
             List<SelecionarManyNoticiaFiltersQueryResponse> responseMany = new List<SelecionarManyNoticiaFiltersQueryResponse>();
 
@@ -74,7 +75,7 @@ namespace ms_usuario.Features.NoticiaFeature.Queries
                 response.DataAtualizacao = noticia.DataAtualizacao;
                 response.UsuarioCadastroId = noticia.UsuarioCadastroId;
                 response.SociedadeId = noticia.SociedadeId;
-                response.UsuarioCadastroNome = await GetUsuarioCadastroNomeAsync(noticia.UsuarioCadastroId, cancellationToken);
+                response.UsuarioCadastroNome = usuarioCadastroNomes.GetValueOrDefault(noticia.UsuarioCadastroId, string.Empty);
                 response.Id = noticia.Id;
                 responseMany.Add(response);
             }
@@ -87,29 +88,34 @@ namespace ms_usuario.Features.NoticiaFeature.Queries
             CancellationToken cancellationToken
         )
         {
-            return await _repository.GetAsync
+            return await _repository.GetAsNoTrackingAsync
                 (
                     cancellationToken,
                     item => item.NoticiaAreaInteresseMany
                 );
         }
 
-        private async Task<string> GetUsuarioCadastroNomeAsync
+        private async Task<IReadOnlyDictionary<long, string>> GetUsuarioCadastroNomesAsync
         (
-            long usuarioCadastroId,
+            IEnumerable<Noticia> noticiaMany,
             CancellationToken cancellationToken
         )
         {
-            var usuario = await _repositoryUsuario.GetFirstAsync
+            List<long> usuarioCadastroIds = noticiaMany
+                .Select(noticia => noticia.UsuarioCadastroId)
+                .Distinct()
+                .ToList();
+
+            if (usuarioCadastroIds.Count == 0)
+                return new Dictionary<long, string>();
+
+            IEnumerable<Usuario> usuarioMany = await _repositoryUsuario.GetAsNoTrackingAsync
                 (
-                    item => item.Id.Equals(usuarioCadastroId),
+                    usuario => usuarioCadastroIds.Contains(usuario.Id),
                     cancellationToken
                 );
 
-            if (usuario is not null)
-                return usuario.Nome;
-
-            return string.Empty;
+            return usuarioMany.ToDictionary(usuario => usuario.Id, usuario => usuario.Nome);
         }
 
         private async Task<IEnumerable<AreaInteresse>> GetAreaInteresseAsync
@@ -117,7 +123,7 @@ namespace ms_usuario.Features.NoticiaFeature.Queries
             CancellationToken cancellationToken
         )
         {
-            return await _repositoryAreaInteresse.GetAsync
+            return await _repositoryAreaInteresse.GetAsNoTrackingAsync
                 (
                     cancellationToken
                 );

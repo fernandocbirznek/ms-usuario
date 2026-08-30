@@ -67,7 +67,7 @@ namespace ms_usuario.Features.UsuarioNoticiaFavoritadoFeature.Queries
             CancellationToken cancellationToken
         )
         {
-            return await _repository.GetAsync
+            return await _repository.GetAsNoTrackingAsync
                 (
                     item => item.UsuarioId.Equals(request.Id),
                     cancellationToken

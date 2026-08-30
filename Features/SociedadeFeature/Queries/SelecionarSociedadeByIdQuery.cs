@@ -51,8 +51,6 @@ namespace ms_usuario.Features.SociedadeFeature.Queries
 
             Sociedade sociedade = await GetFirstAsync(request, cancellationToken);
 
-            Validator(sociedade);
-
             SelecionarSociedadeByIdQueryResponse response = new SelecionarSociedadeByIdQueryResponse();
             response.Nome = sociedade.Nome;
             response.Descricao = sociedade.Descricao;
@@ -76,27 +74,19 @@ namespace ms_usuario.Features.SociedadeFeature.Queries
             return response;
         }
 
-        private async void Validator
-        (
-            Sociedade sociedade
-        )
-        {
-            if (sociedade is null) throw new ArgumentNullException("Sociedade não encontrado");
-        }
-
         private async Task<Sociedade> GetFirstAsync
         (
             SelecionarSociedadeByIdQuery request,
             CancellationToken cancellationToken
         )
         {
-            return await _repository.GetFirstAsync
+            return await _repository.GetFirstAsNoTrackingAsync
                 (
                     item => item.Id.Equals(request.Id),
                     cancellationToken,
                     item => item.Noticias,
                     item => item.Noticias.Select(noticia => noticia.NoticiaAreaInteresseMany)
-                );
+                ) ?? throw new ArgumentNullException("Sociedade não encontrado");
         }
     }
 }

@@ -35,9 +35,31 @@ namespace ms_usuario.Repositories
                 .ToListAsync(cancellationToken);
         }
 
-        public virtual async Task<T> GetFirstAsync(Expression<Func<T, bool>> lambda, CancellationToken cancellationToken, params Expression<Func<T, object>>[] joins) => await Query(joins).FirstOrDefaultAsync(lambda, cancellationToken);
+        public virtual async Task<T?> GetFirstAsync(Expression<Func<T, bool>> lambda, CancellationToken cancellationToken, params Expression<Func<T, object>>[] joins) => await Query(joins).FirstOrDefaultAsync(lambda, cancellationToken);
 
-        public virtual async Task<T> GetSingleAsync(Expression<Func<T, bool>> lambda, CancellationToken cancellationToken, params Expression<Func<T, object>>[] joins) => await Query(joins).SingleOrDefaultAsync(lambda, cancellationToken);
+        public virtual async Task<T?> GetSingleAsync(Expression<Func<T, bool>> lambda, CancellationToken cancellationToken, params Expression<Func<T, object>>[] joins) => await Query(joins).SingleOrDefaultAsync(lambda, cancellationToken);
+
+        public virtual async Task<IEnumerable<T>> GetAsNoTrackingAsync(CancellationToken cancellationToken, params Expression<Func<T, object>>[] joins)
+        {
+            return await Query(joins)
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
+        }
+
+        public virtual async Task<IEnumerable<T>> GetAsNoTrackingAsync(Expression<Func<T, bool>> lambda, CancellationToken cancellationToken, params Expression<Func<T, object>>[] joins)
+        {
+            return await Query(joins)
+                .AsNoTracking()
+                .Where(lambda)
+                .ToListAsync(cancellationToken);
+        }
+
+        public virtual async Task<T?> GetFirstAsNoTrackingAsync(Expression<Func<T, bool>> lambda, CancellationToken cancellationToken, params Expression<Func<T, object>>[] joins)
+        {
+            return await Query(joins)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(lambda, cancellationToken);
+        }
 
         public virtual async Task<bool> ExistsAsync(Expression<Func<T, bool>> lambda, CancellationToken cancellationToken) => await Query().AnyAsync(lambda, cancellationToken);
 

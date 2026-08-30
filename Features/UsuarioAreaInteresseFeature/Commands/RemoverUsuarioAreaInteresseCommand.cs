@@ -37,15 +37,13 @@ namespace ms_usuario.Features.UsuarioAreaInteresseFeature.Commands
             if (request is null)
                 throw new ArgumentNullException(MessageHelper.NullFor<RemoverUsuarioAreaInteresseCommand>());
 
-            UsuarioAreaInteresse usuarioAreaInteresse = await 
+            UsuarioAreaInteresse usuarioAreaInteresse = await
                 _repository
                     .GetFirstAsync
                     (
-                        item => item.UsuarioId.Equals(request.UsuarioId) && item.AreaInteresseId.Equals(request.AreaInteresseId), 
+                        item => item.UsuarioId.Equals(request.UsuarioId) && item.AreaInteresseId.Equals(request.AreaInteresseId),
                         cancellationToken
-                    );
-
-            Validator(usuarioAreaInteresse);
+                    ) ?? throw new ArgumentNullException("Usuário área interesse não encontrado");
 
             await _repository.RemoveAsync(usuarioAreaInteresse);
             await _repository.SaveChangesAsync(cancellationToken);
@@ -56,12 +54,5 @@ namespace ms_usuario.Features.UsuarioAreaInteresseFeature.Commands
             return response;
         }
 
-        private void Validator
-        (
-            UsuarioAreaInteresse usuarioAreaInteresse
-        )
-        {
-            if (usuarioAreaInteresse is null) throw new ArgumentNullException("Usuário área interesse não encontrado");
-        }
     }
 }

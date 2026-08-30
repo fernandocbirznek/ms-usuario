@@ -35,7 +35,7 @@ namespace ms_usuario.Features.AreaInteresseFeature.Queries
             if (request is null)
                 throw new ArgumentNullException(MessageHelper.NullFor<SelecionarAreaInteresseFiltersQuery>());
 
-            IEnumerable<AreaInteresse> areaInteresseMany = await _repository.GetAsync(cancellationToken);
+            IEnumerable<AreaInteresse> areaInteresseMany = await _repository.GetAsNoTrackingAsync(cancellationToken);
 
             List<SelecionarAreaInteresseFiltersQueryResponse> responseMany = new List<SelecionarAreaInteresseFiltersQueryResponse>();
 

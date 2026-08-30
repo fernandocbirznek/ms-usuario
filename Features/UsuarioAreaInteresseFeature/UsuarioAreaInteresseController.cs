@@ -35,7 +35,7 @@ namespace ms_usuario.Features.UsuarioAreaInteresseFeature
         }
 
         [HttpGet("selecionar-areas-interesse-usuario/{usuarioId}")]
-        public async Task<ActionResult> GetForum(long usuarioId)
+        public async Task<ActionResult> GetUsuarioAreaInteresse(long usuarioId)
         {
             return await this.SendAsync(_mediator, new SelecionarUsuarioAreaInteresseByUsuarioIdQuery() { Id = usuarioId });
         }

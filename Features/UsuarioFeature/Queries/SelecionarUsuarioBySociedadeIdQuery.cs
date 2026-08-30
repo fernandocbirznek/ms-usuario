@@ -51,7 +51,7 @@ namespace ms_usuario.Features.UsuarioFeature.Queries
                 throw new ArgumentNullException(MessageHelper.NullFor<SelecionarUsuarioBySociedadeIdQuery>());
 
             //TODO REMOVER OU TROCAR PARA PEGAR DE USUARIOSOCIEDADE
-            IEnumerable<Usuario> usuarioMany = await _repository.GetAsync
+            IEnumerable<Usuario> usuarioMany = await _repository.GetAsNoTrackingAsync
                 (
                     item => item.Id.Equals(request.Id),
                     cancellationToken,
@@ -70,7 +70,7 @@ namespace ms_usuario.Features.UsuarioFeature.Queries
                 response.DataAtualizacao = usuario.DataAtualizacao;
                 response.Id = usuario.Id;
                 response.Email = usuario.Email;
-                response.TipoUsuario = usuario.TipoUsuario;
+                response.TipoUsuario = (int)usuario.TipoUsuario;
                 response.ComentarioAula = usuario.ComentarioAula;
                 response.ComentarioForum = usuario.ComentarioForum;
                 response.UsuarioAreaInteresse = usuario.UsuarioAreaInteresses;

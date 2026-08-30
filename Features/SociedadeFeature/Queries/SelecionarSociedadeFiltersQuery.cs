@@ -37,7 +37,7 @@ namespace ms_usuario.Features.SociedadeFeature.Queries
             if (request is null)
                 throw new ArgumentNullException(MessageHelper.NullFor<SelecionarSociedadeFiltersQuery>());
 
-            IEnumerable<Sociedade> sociedadeMany = await _repository.GetAsync(cancellationToken);
+            IEnumerable<Sociedade> sociedadeMany = await _repository.GetAsNoTrackingAsync(cancellationToken);
 
             List<SelecionarSociedadeFiltersQueryResponse> responseMany = new List<SelecionarSociedadeFiltersQueryResponse>();
 

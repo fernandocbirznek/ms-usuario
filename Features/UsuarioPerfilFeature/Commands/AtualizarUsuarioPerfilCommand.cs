@@ -57,7 +57,7 @@ namespace ms_usuario.Features.UsuarioPerfilFeature.Commands
             await _repository.SaveChangesAsync(cancellationToken);
 
             AtualizarUsuarioPerfilCommandResponse response = new AtualizarUsuarioPerfilCommandResponse();
-            response.DataAtualizacao = usuarioPerfil.DataAtualizacao;
+            response.DataAtualizacao = usuarioPerfil.DataAtualizacao.GetValueOrDefault();
 
             return response;
         }
@@ -84,7 +84,7 @@ namespace ms_usuario.Features.UsuarioPerfilFeature.Commands
                     item => item.Id.Equals(request.Id),
                     cancellationToken,
                     item => item.Usuario
-                );
+                ) ?? throw new ArgumentNullException("Usuário perfil não existe");
         }
 
         private async Task<bool> ExistsAsync

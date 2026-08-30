@@ -8,8 +8,11 @@ namespace ms_usuario.Interface
     {
         Task<IEnumerable<T>> GetAsync(CancellationToken cancellationToken, params Expression<Func<T, object>>[] joins);
         Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> lambda, CancellationToken cancellationToken, params Expression<Func<T, object>>[] joins);
-        Task<T> GetFirstAsync(Expression<Func<T, bool>> lambda, CancellationToken cancellationToken, params Expression<Func<T, object>>[] joins);
-        Task<T> GetSingleAsync(Expression<Func<T, bool>> lambda, CancellationToken cancellationToken, params Expression<Func<T, object>>[] joins);
+        Task<T?> GetFirstAsync(Expression<Func<T, bool>> lambda, CancellationToken cancellationToken, params Expression<Func<T, object>>[] joins);
+        Task<T?> GetSingleAsync(Expression<Func<T, bool>> lambda, CancellationToken cancellationToken, params Expression<Func<T, object>>[] joins);
+        Task<IEnumerable<T>> GetAsNoTrackingAsync(CancellationToken cancellationToken, params Expression<Func<T, object>>[] joins);
+        Task<IEnumerable<T>> GetAsNoTrackingAsync(Expression<Func<T, bool>> lambda, CancellationToken cancellationToken, params Expression<Func<T, object>>[] joins);
+        Task<T?> GetFirstAsNoTrackingAsync(Expression<Func<T, bool>> lambda, CancellationToken cancellationToken, params Expression<Func<T, object>>[] joins);
         Task<bool> ExistsAsync(Expression<Func<T, bool>> lambda, CancellationToken cancellationToken);
         Task AddAsync(T entity, CancellationToken cancellationToken);
         Task AddCollectionAsync(IEnumerable<T> entities, CancellationToken cancellationToken);

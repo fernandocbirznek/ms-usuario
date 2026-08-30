@@ -57,7 +57,7 @@ namespace ms_usuario.Features.NoticiaFeature
         }
 
         [HttpGet("selecionar-noticias-sistema")]
-        public async Task<ActionResult> GetMayNoticia()
+        public async Task<ActionResult> GetNoticias()
         {
             return await this.SendAsync(_mediator, new SelecionarManyNoticiaFiltersQuery());
         }

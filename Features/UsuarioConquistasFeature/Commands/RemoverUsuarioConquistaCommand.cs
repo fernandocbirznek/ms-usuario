@@ -36,9 +36,8 @@ namespace ms_usuario.Features.UsuarioConquistasFeature.Commands
             if (request is null)
                 throw new ArgumentNullException(MessageHelper.NullFor<RemoverUsuarioConquistaCommand>());
 
-            UsuarioConquistas usuarioConquista = await _repository.GetFirstAsync(item => item.Id.Equals(request.Id), cancellationToken);
-
-            Validator(usuarioConquista);
+            UsuarioConquistas usuarioConquista = await _repository.GetFirstAsync(item => item.Id.Equals(request.Id), cancellationToken)
+                ?? throw new ArgumentNullException("Usuário área conquista não encontrado");
 
             await _repository.RemoveAsync(usuarioConquista);
             await _repository.SaveChangesAsync(cancellationToken);
@@ -49,12 +48,5 @@ namespace ms_usuario.Features.UsuarioConquistasFeature.Commands
             return response;
         }
 
-        private void Validator
-        (
-            UsuarioConquistas usuarioConquista
-        )
-        {
-            if (usuarioConquista is null) throw new ArgumentNullException("Usuário área conquista não encontrado");
-        }
     }
 }

@@ -55,7 +55,7 @@ namespace ms_usuario.Features.UsuarioFeature.Queries
             if (request is null)
                 throw new ArgumentNullException(MessageHelper.NullFor<SelecionarUsuarioFiltersQuery>());
 
-            IEnumerable<Usuario> usuarioMany = await _repository.GetAsync
+            IEnumerable<Usuario> usuarioMany = await _repository.GetAsNoTrackingAsync
                 (
                     cancellationToken,
                     item => item.Perfil,
@@ -92,7 +92,7 @@ namespace ms_usuario.Features.UsuarioFeature.Queries
                 response.DataAtualizacao = usuario.DataAtualizacao;
                 response.Id = usuario.Id;
                 response.Email = usuario.Email;
-                response.TipoUsuario = usuario.TipoUsuario;
+                response.TipoUsuario = (int)usuario.TipoUsuario;
                 response.ComentarioAula = usuario.ComentarioAula;
                 response.ComentarioForum = usuario.ComentarioForum;
                 response.UsuarioAreaInteresses = usuarioAreaInteresse;
@@ -116,7 +116,7 @@ namespace ms_usuario.Features.UsuarioFeature.Queries
            CancellationToken cancellationToken
         )
         {
-            return await _repositoryAreaInteresse.GetAsync
+            return await _repositoryAreaInteresse.GetAsNoTrackingAsync
                 (
                     cancellationToken
                 );
@@ -127,7 +127,7 @@ namespace ms_usuario.Features.UsuarioFeature.Queries
             CancellationToken cancellationToken
         )
         {
-            return await _repositoryConquista.GetAsync
+            return await _repositoryConquista.GetAsNoTrackingAsync
                 (
                     cancellationToken
                 );

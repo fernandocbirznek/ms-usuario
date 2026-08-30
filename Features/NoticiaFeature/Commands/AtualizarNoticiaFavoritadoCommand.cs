@@ -48,7 +48,7 @@ namespace ms_usuario.Features.NoticiaFeature.Commands
             await _repository.SaveChangesAsync(cancellationToken);
 
             AtualizarNoticiaFavoritadoCommandResponse response = new AtualizarNoticiaFavoritadoCommandResponse();
-            response.DataAtualizacao = noticia.DataAtualizacao;
+            response.DataAtualizacao = noticia.DataAtualizacao.GetValueOrDefault();
 
             return response;
         }
@@ -73,7 +73,7 @@ namespace ms_usuario.Features.NoticiaFeature.Commands
                 (
                     item => item.Id.Equals(request.Id),
                     cancellationToken
-                );
+                ) ?? throw new ArgumentNullException("Noticia não existe");
         }
 
         private async Task<bool> ExistsNoticiaAsync

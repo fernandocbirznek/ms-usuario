@@ -15,7 +15,7 @@ namespace ms_usuario.Features.UsuarioNoticiaFavoritadoFeature.Commands
     public class RemoverUsuarioNoticiaFavoritadoCommandHandler
         : IRequestHandler<RemoverUsuarioNoticiaFavoritadoCommand, long>
     {
-        private IMediator _mediator;
+        private readonly IMediator _mediator;
         private readonly IRepository<UsuarioNoticiaFavoritado> _repository;
 
         public RemoverUsuarioNoticiaFavoritadoCommandHandler
@@ -39,9 +39,13 @@ namespace ms_usuario.Features.UsuarioNoticiaFavoritadoFeature.Commands
 
             await Validator(request, cancellationToken);
 
-            UsuarioNoticiaFavoritado usuarioNoticiaFavoritado = await _repository.GetFirstAsync(item => item.Id.Equals(request.Id), cancellationToken);
+            UsuarioNoticiaFavoritado usuarioNoticiaFavoritado = await _repository.GetFirstAsync(item => item.Id.Equals(request.Id), cancellationToken)
+                ?? throw new ArgumentNullException("Noticia favoritada não encontrada");
 
-            await _mediator.Send(new AtualizarNoticiaFavoritadoCommand { Id = request.NoticiaId, Adicionar = false });
+            await _mediator.Send(
+                new AtualizarNoticiaFavoritadoCommand { Id = request.NoticiaId, Adicionar = false },
+                cancellationToken
+            );
 
             await _repository.RemoveAsync(usuarioNoticiaFavoritado);
             await _repository.SaveChangesAsync(cancellationToken);

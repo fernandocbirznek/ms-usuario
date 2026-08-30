@@ -38,7 +38,8 @@ namespace ms_usuario.Features.UsuarioPerfilFeature.Commands
 
             await Validator(request, cancellationToken);
 
-            UsuarioPerfil usuarioPerfil = await _repository.GetFirstAsync(item => item.Id.Equals(request.Id), cancellationToken);
+            UsuarioPerfil usuarioPerfil = await _repository.GetFirstAsync(item => item.Id.Equals(request.Id), cancellationToken)
+                ?? throw new ArgumentNullException("Perfil usuário não encontrado");
 
             await _repository.RemoveAsync(usuarioPerfil);
             await _repository.SaveChangesAsync(cancellationToken);

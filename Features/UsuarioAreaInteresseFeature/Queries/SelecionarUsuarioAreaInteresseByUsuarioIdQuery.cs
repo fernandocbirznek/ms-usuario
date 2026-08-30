@@ -36,7 +36,7 @@ namespace ms_usuario.Features.UsuarioAreaInteresseFeature.Queries
             if (request is null)
                 throw new ArgumentNullException(MessageHelper.NullFor<SelecionarUsuarioAreaInteresseByUsuarioIdQuery>());
 
-            IEnumerable<UsuarioAreaInteresse> usuarioInteresseMany = await _repository.GetAsync
+            IEnumerable<UsuarioAreaInteresse> usuarioInteresseMany = await _repository.GetAsNoTrackingAsync
                 (
                     item => item.UsuarioId.Equals(request.Id),
                     cancellationToken,

@@ -39,7 +39,7 @@ namespace ms_usuario.Features.AreaInteresseFeature
         }
 
         [HttpGet("selecionar-area-interesse/{areaInteresseId}")]
-        public async Task<ActionResult> GetForum(long areaInteresseId)
+        public async Task<ActionResult> GetAreaInteresse(long areaInteresseId)
         {
             return await this.SendAsync(_mediator, new SelecionarAreaInteresseByIdQuery() { Id = areaInteresseId });
         }

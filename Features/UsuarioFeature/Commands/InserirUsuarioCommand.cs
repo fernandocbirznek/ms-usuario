@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using ms_usuario.Domains;
 using ms_usuario.Extensions;
-using ms_usuario.Features.NoticiaFeature.Commands;
 using ms_usuario.Features.UsuarioPerfilFeature.Commands;
 using ms_usuario.Helpers;
 using ms_usuario.Interface;
@@ -28,7 +27,7 @@ namespace ms_usuario.Features.UsuarioFeature.Commands
 
     public class InserirUsuarioHandler : IRequestHandler<InserirUsuarioCommand, InserirUsuarioCommandResponse>
     {
-        private IMediator _mediator;
+        private readonly IMediator _mediator;
 
         private readonly IRepository<Usuario> _repository;
 
@@ -60,7 +59,7 @@ namespace ms_usuario.Features.UsuarioFeature.Commands
 
             InserirUsuarioCommandResponse response = new InserirUsuarioCommandResponse();
             response.DataCadastro = usuario.DataCadastro;
-            response.TipoUsuario = usuario.TipoUsuario;
+            response.TipoUsuario = (int)usuario.TipoUsuario;
             response.Id = usuario.Id;
 
             await _mediator.Send
@@ -71,7 +70,8 @@ namespace ms_usuario.Features.UsuarioFeature.Commands
                     Foto = request.Foto,
                     Hobbie = request.Hobbie,
                     UsuarioId = usuario.Id
-                }
+                },
+                cancellationToken
             );
 
             return response;

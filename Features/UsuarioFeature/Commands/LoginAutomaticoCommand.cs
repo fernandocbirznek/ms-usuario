@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.IdentityModel.Tokens;
 using ms_usuario.Domains;
+using ms_usuario.Domains.Enums;
 using ms_usuario.Extensions;
 using ms_usuario.Helpers;
 using ms_usuario.Interface;
@@ -19,7 +20,7 @@ namespace ms_usuario.Features.UsuarioFeature.Commands
     {
         public string Nome { get; set; }
         public string Email { get; set; }
-        public int TipoUsuario { get; set; }
+        public TipoUsuarioEnum TipoUsuario { get; set; }
         public long ComentarioForum { get; set; }
         public long TopicoForum { get; set; }
         public long ComentarioAula { get; set; }
@@ -82,13 +83,13 @@ namespace ms_usuario.Features.UsuarioFeature.Commands
             SecurityToken validatedToken;
             ClaimsPrincipal principal = handler.ValidateToken(request.Token, tokenValidationParameters, out validatedToken);
 
-            var jwtToken = (JwtSecurityToken)validatedToken;
-            var usuarioIdClaim = principal.Claims.First(claim => claim.Type == "usuarioId");
+            var usuarioIdClaim = principal.Claims.FirstOrDefault(claim => claim.Type == "usuarioId");
 
-            if (usuarioIdClaim == null)
+            if (usuarioIdClaim is null)
                 throw new SecurityTokenException("Invalid token: usuarioId claim not found");
 
-            var usuarioId = long.Parse(usuarioIdClaim.Value);
+            if (!long.TryParse(usuarioIdClaim.Value, out long usuarioId))
+                throw new SecurityTokenException("Invalid token: usuarioId claim is invalid");
 
             //
 
@@ -99,7 +100,7 @@ namespace ms_usuario.Features.UsuarioFeature.Commands
                     item => item.Perfil,
                     item => item.UsuarioAreaInteresses,
                     item => item.UsuarioConquistas
-                );
+                ) ?? throw new ArgumentNullException("Usuário não encontrado");
 
             List<AreaInteresse> usuarioAreaInteresse = new List<AreaInteresse>();
             foreach (UsuarioAreaInteresse item in usuario.UsuarioAreaInteresses)

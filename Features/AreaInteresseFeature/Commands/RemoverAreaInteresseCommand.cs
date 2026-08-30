@@ -33,7 +33,8 @@ namespace ms_usuario.Features.AreaInteresseFeature.Commands
 
             await Validator(request, cancellationToken);
 
-            AreaInteresse areaInteresse = await _repository.GetFirstAsync(item => item.Id.Equals(request.Id), cancellationToken);
+            AreaInteresse areaInteresse = await _repository.GetFirstAsync(item => item.Id.Equals(request.Id), cancellationToken)
+                ?? throw new ArgumentNullException("Área de interesse não encontrada");
 
             await _repository.RemoveAsync(areaInteresse);
             await _repository.SaveChangesAsync(cancellationToken);

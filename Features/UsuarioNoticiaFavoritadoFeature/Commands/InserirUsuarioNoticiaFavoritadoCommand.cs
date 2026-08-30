@@ -24,7 +24,7 @@ namespace ms_usuario.Features.UsuarioNoticiaFeature.Commands
     public class InserirUsuarioNoticiaFavoritadoHandler :
         IRequestHandler<InserirUsuarioNoticiaFavoritadoCommand, InserirUsuarioNoticiaFavoritadoCommandResponse>
     {
-        private IMediator _mediator;
+        private readonly IMediator _mediator;
 
         private readonly IRepository<UsuarioNoticiaFavoritado> _repository;
         private readonly IRepository<Noticia> _repositoryNoticia;
@@ -56,7 +56,10 @@ namespace ms_usuario.Features.UsuarioNoticiaFeature.Commands
 
             UsuarioNoticiaFavoritado usuarioNoticiaFavoritado = request.ToDomain();
 
-            await _mediator.Send(new AtualizarNoticiaFavoritadoCommand { Id = request.NoticiaId, Adicionar = true });
+            await _mediator.Send(
+                new AtualizarNoticiaFavoritadoCommand { Id = request.NoticiaId, Adicionar = true },
+                cancellationToken
+            );
 
             await _repository.AddAsync(usuarioNoticiaFavoritado, cancellationToken);
             await _repository.SaveChangesAsync(cancellationToken);

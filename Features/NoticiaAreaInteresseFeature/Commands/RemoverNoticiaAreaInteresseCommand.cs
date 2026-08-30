@@ -39,7 +39,8 @@ namespace ms_usuario.Features.NoticiaAreaInteresseFeature.Commands
 
             await Validator(request, cancellationToken);
 
-            NoticiaAreaInteresse noticiaAreaInteresse = await _repository.GetFirstAsync(item => item.Id.Equals(request.Id), cancellationToken);
+            NoticiaAreaInteresse noticiaAreaInteresse = await _repository.GetFirstAsync(item => item.Id.Equals(request.Id), cancellationToken)
+                ?? throw new ArgumentNullException("NoticiaAreaInteresse não encontrada");
 
             await _repository.RemoveAsync(noticiaAreaInteresse);
             await _repository.SaveChangesAsync(cancellationToken);

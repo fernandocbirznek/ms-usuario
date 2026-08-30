@@ -38,8 +38,6 @@ namespace ms_usuario.Features.AreaInteresseFeature.Queries
 
             AreaInteresse areaInteresse = await GetFirstAsync(request, cancellationToken);
 
-            Validator(areaInteresse, cancellationToken);
-
             SelecionarAreaInteresseByIdQueryResponse response = new SelecionarAreaInteresseByIdQueryResponse();
 
             response.Nome = areaInteresse.Nome;
@@ -50,26 +48,17 @@ namespace ms_usuario.Features.AreaInteresseFeature.Queries
             return response;
         }
 
-        private async void Validator
-        (
-            AreaInteresse areaInteresse,
-            CancellationToken cancellationToken
-        )
-        {
-            if (areaInteresse is null) throw new ArgumentNullException("Área de interesse não encontrado");
-        }
-
         private async Task<AreaInteresse> GetFirstAsync
         (
             SelecionarAreaInteresseByIdQuery request,
             CancellationToken cancellationToken
         )
         {
-            return await _repository.GetFirstAsync
+            return await _repository.GetFirstAsNoTrackingAsync
                 (
                     item => item.Id.Equals(request.Id),
                     cancellationToken
-                );
+                ) ?? throw new ArgumentNullException("Área de interesse não encontrado");
         }
     }
 }

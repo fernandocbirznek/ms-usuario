@@ -55,7 +55,7 @@ namespace ms_usuario.Features.UsuarioFeature.Commands
             await _repository.SaveChangesAsync(cancellationToken);
 
             AtualizarUsuarioCommandResponse response = new AtualizarUsuarioCommandResponse();
-            response.DataAtualizacao = usuario.DataAtualizacao;
+            response.DataAtualizacao = usuario.DataAtualizacao.GetValueOrDefault();
 
             return response;
         }
@@ -84,7 +84,7 @@ namespace ms_usuario.Features.UsuarioFeature.Commands
                 (
                     item => item.Id.Equals(request.Id),
                     cancellationToken
-                );
+                ) ?? throw new ArgumentNullException("Usuario não encontrado");
         }
 
         private async Task<bool> ExistsAsync

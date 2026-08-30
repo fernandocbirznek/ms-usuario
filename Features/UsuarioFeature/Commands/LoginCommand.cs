@@ -75,7 +75,7 @@ namespace ms_usuario.Features.UsuarioFeature.Commands
                     item => item.Perfil,
                     item => item.UsuarioAreaInteresses,
                     item => item.UsuarioConquistas
-                );
+                ) ?? throw new ArgumentNullException("Usuário não encontrado");
 
             List<AreaInteresse> usuarioAreaInteresse = new List<AreaInteresse>();
             foreach (UsuarioAreaInteresse item in usuario.UsuarioAreaInteresses)
@@ -85,9 +85,7 @@ namespace ms_usuario.Features.UsuarioFeature.Commands
                     usuarioAreaInteresse.Add(areaInteresse);
             }
 
-            string hash = request.ObterHash(usuario.Salt);
-
-            if (hash != usuario.Senha)
+            if (!request.SenhaCorresponde(usuario.Salt, usuario.Senha))
                 throw new InvalidOperationException("Senha incorreta.");
 
             string chaveJwt = _configuration.GetValue<string>("authentication:secret")!;

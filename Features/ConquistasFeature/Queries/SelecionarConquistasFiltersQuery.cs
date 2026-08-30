@@ -35,7 +35,7 @@ namespace ms_usuario.Features.ConquistasFeature.Queries
             if (request is null)
                 throw new ArgumentNullException(MessageHelper.NullFor<SelecionarConquistasFiltersQuery>());
 
-            IEnumerable<Conquistas> conquistasMany = await _repository.GetAsync(cancellationToken);
+            IEnumerable<Conquistas> conquistasMany = await _repository.GetAsNoTrackingAsync(cancellationToken);
 
             List<SelecionarConquistasFiltersQueryResponse> responseMany = new List<SelecionarConquistasFiltersQueryResponse>();
 

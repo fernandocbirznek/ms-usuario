@@ -46,7 +46,7 @@ namespace ms_usuario.Features.AreaInteresseFeature.Commands
             await _repository.SaveChangesAsync(cancellationToken);
 
             AtualizarAreaInteresseCommandResponse response = new AtualizarAreaInteresseCommandResponse();
-            response.DataAtualizacao = areaInteresse.DataAtualizacao;
+            response.DataAtualizacao = areaInteresse.DataAtualizacao.GetValueOrDefault();
 
             return response;
         }
@@ -73,7 +73,7 @@ namespace ms_usuario.Features.AreaInteresseFeature.Commands
                 (
                     item => item.Id.Equals(request.Id),
                     cancellationToken
-                );
+                ) ?? throw new ArgumentNullException("Área da Física não encontrada");
         }
 
         private async Task<bool> ExistsAsync

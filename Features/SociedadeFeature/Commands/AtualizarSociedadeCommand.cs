@@ -55,7 +55,7 @@ namespace ms_usuario.Features.SociedadeFeature.Commands
             await _repository.SaveChangesAsync(cancellationToken);
 
             AtualizarSociedadeCommandResponse response = new AtualizarSociedadeCommandResponse();
-            response.DataAtualizacao = sociedade.DataAtualizacao;
+            response.DataAtualizacao = sociedade.DataAtualizacao.GetValueOrDefault();
             response.Id = request.Id;
             response.Nome = request.Nome;
             response.Descricao = request.Descricao;
@@ -88,7 +88,7 @@ namespace ms_usuario.Features.SociedadeFeature.Commands
                 (
                     item => item.Id.Equals(request.Id),
                     cancellationToken
-                );
+                ) ?? throw new ArgumentNullException("Sociedade não encontrada");
         }
 
         private async Task<bool> ExistsAsync

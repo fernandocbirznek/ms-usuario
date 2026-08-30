@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ms_usuario.Domains;
 using ms_usuario.Extensions;
 using ms_usuario.Features.NoticiaAreaInteresseFeature.Commands;
 using ms_usuario.Features.NoticiaAreaInteresseFeature.Queries;

@@ -41,8 +41,6 @@ namespace ms_usuario.Features.UsuarioPerfilFeature.Queries
 
             UsuarioPerfil usuarioPerfil = await GetFirstAsync(request, cancellationToken);
 
-            Validator(usuarioPerfil);
-
             SelecionarUsuarioPerfilByUsuarioIdQueryResponse response = new SelecionarUsuarioPerfilByUsuarioIdQueryResponse();
 
             response.DataNascimento = usuarioPerfil.DataNascimento;
@@ -55,25 +53,17 @@ namespace ms_usuario.Features.UsuarioPerfilFeature.Queries
             return response;
         }
 
-        private async void Validator
-        (
-            UsuarioPerfil usuarioPerfil
-        )
-        {
-            if (usuarioPerfil is null) throw new ArgumentNullException("Perfil usuário não encontrado");
-        }
-
         private async Task<UsuarioPerfil> GetFirstAsync
         (
             SelecionarUsuarioPerfilByUsuarioIdQuery request,
             CancellationToken cancellationToken
         )
         {
-            return await _repository.GetFirstAsync
+            return await _repository.GetFirstAsNoTrackingAsync
                 (
                     item => item.Id.Equals(request.Id),
                     cancellationToken
-                );
+                ) ?? throw new ArgumentNullException("Perfil usuário não encontrado");
         }
     }
 }

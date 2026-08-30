@@ -46,7 +46,7 @@ namespace ms_usuario.Features.ConquistasFeature.Commands
             await _repository.SaveChangesAsync(cancellationToken);
 
             AtualizarConquistasCommandResponse response = new AtualizarConquistasCommandResponse();
-            response.DataAtualizacao = conquistas.DataAtualizacao;
+            response.DataAtualizacao = conquistas.DataAtualizacao.GetValueOrDefault();
 
             return response;
         }
@@ -73,7 +73,7 @@ namespace ms_usuario.Features.ConquistasFeature.Commands
                 (
                     item => item.Id.Equals(request.Id),
                     cancellationToken
-                );
+                ) ?? throw new ArgumentNullException("Conquista não encontrada");
         }
 
         private async Task<bool> ExistsAsync

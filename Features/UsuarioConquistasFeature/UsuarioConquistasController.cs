@@ -32,7 +32,7 @@ namespace ms_usuario.Features.UsuarioConquistasFeature
         }
 
         [HttpGet("selecionar-conquistas-usuario/{usuarioId}")]
-        public async Task<ActionResult> GetForum(long usuarioId)
+        public async Task<ActionResult> GetUsuarioConquistas(long usuarioId)
         {
             return await this.SendAsync(_mediator, new SelecionarUsuarioConquistasByUsuarioIdQuery() { Id = usuarioId });
         }

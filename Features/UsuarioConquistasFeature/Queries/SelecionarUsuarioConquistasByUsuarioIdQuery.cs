@@ -36,7 +36,7 @@ namespace ms_usuario.Features.UsuarioConquistasFeature.Queries
             if (request is null)
                 throw new ArgumentNullException(MessageHelper.NullFor<SelecionarUsuarioConquistasByUsuarioIdQuery>());
 
-            IEnumerable<UsuarioConquistas> usuarioConquistaMany = await _repository.GetAsync
+            IEnumerable<UsuarioConquistas> usuarioConquistaMany = await _repository.GetAsNoTrackingAsync
                 (
                     item => item.UsuarioId.Equals(request.Id),
                     cancellationToken,

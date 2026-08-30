@@ -60,8 +60,6 @@ namespace ms_usuario.Features.UsuarioFeature.Queries
             IEnumerable<Conquistas> conquistaMany = await GetConquistaAsync(cancellationToken);
 
 
-            Validator(usuario);
-
             List<AreaInteresse> usuarioAreaInteresse = new List<AreaInteresse>();
             foreach (UsuarioAreaInteresse item in usuario.UsuarioAreaInteresses)
             {
@@ -84,7 +82,7 @@ namespace ms_usuario.Features.UsuarioFeature.Queries
             response.DataAtualizacao = usuario.DataAtualizacao;
             response.Id = usuario.Id;
             response.Email = usuario.Email;
-            response.TipoUsuario = usuario.TipoUsuario;
+            response.TipoUsuario = (int)usuario.TipoUsuario;
             response.ComentarioAula = usuario.ComentarioAula;
             response.ComentarioForum = usuario.ComentarioForum;
             response.UsuarioAreaInteresses = usuarioAreaInteresse;
@@ -100,28 +98,20 @@ namespace ms_usuario.Features.UsuarioFeature.Queries
             return response;
         }
 
-        private void Validator
-        (
-            Usuario usuario
-        )
-        {
-            if (usuario is null) throw new ArgumentNullException("Usuário não encontrado");
-        }
-
         private async Task<Usuario> GetFirstAsync
         (
             SelecionarUsuarioByIdQuery request,
             CancellationToken cancellationToken
         )
         {
-            return await _repository.GetFirstAsync
+            return await _repository.GetFirstAsNoTrackingAsync
                 (
                     item => item.Id.Equals(request.Id),
                     cancellationToken,
                     item => item.Perfil,
                     item => item.UsuarioConquistas,
                     item => item.UsuarioAreaInteresses
-                );
+                ) ?? throw new ArgumentNullException("Usuário não encontrado");
         }
 
         private async Task<IEnumerable<AreaInteresse>> GetAreaInteresseAsync
@@ -129,7 +119,7 @@ namespace ms_usuario.Features.UsuarioFeature.Queries
             CancellationToken cancellationToken
         )
         {
-            return await _repositoryAreaInteresse.GetAsync
+            return await _repositoryAreaInteresse.GetAsNoTrackingAsync
                 (
                     cancellationToken
                 );
@@ -140,7 +130,7 @@ namespace ms_usuario.Features.UsuarioFeature.Queries
             CancellationToken cancellationToken
         )
         {
-            return await _repositoryConquista.GetAsync
+            return await _repositoryConquista.GetAsNoTrackingAsync
                 (
                     cancellationToken
                 );

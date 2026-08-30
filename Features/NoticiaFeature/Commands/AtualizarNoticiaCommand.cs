@@ -60,62 +60,94 @@ namespace ms_usuario.Features.NoticiaFeature.Commands
             await Validator(request, cancellationToken);
 
             Noticia noticia = await GetFirstAsync(request, cancellationToken);
+            AtualizarDados(noticia, request);
+
+            await _repository.UpdateAsync(noticia);
+            await _repository.SaveChangesAsync(cancellationToken);
+
+            List<long> areaInteresseIds = (request.AreaInteresseMany ?? Enumerable.Empty<long>()).ToList();
+            await SincronizarAreasInteresseAsync(request, areaInteresseIds, cancellationToken);
+
+            IEnumerable<AreaInteresse> areaInteresseMany = await GetAreaInteresseAsync(cancellationToken);
+            List<AreaInteresse> areaInteresseResponse = SelecionarAreasInteresse(areaInteresseIds, areaInteresseMany);
+
+            return ToResponse(noticia, request, areaInteresseResponse);
+        }
+
+        private static void AtualizarDados(Noticia noticia, AtualizarNoticiaCommand request)
+        {
             noticia.Titulo = request.Titulo;
             noticia.Resumo = request.Resumo;
             noticia.Conteudo = request.Conteudo;
             noticia.SociedadeId = request.SociedadeId;
             noticia.DataAtualizacao = DateTime.Now;
+        }
 
-            await _repository.UpdateAsync(noticia);
-            await _repository.SaveChangesAsync(cancellationToken);
+        private async Task SincronizarAreasInteresseAsync
+        (
+            AtualizarNoticiaCommand request,
+            IReadOnlyCollection<long> areaInteresseIds,
+            CancellationToken cancellationToken
+        )
+        {
+            List<NoticiaAreaInteresse> noticiaAreaInteresseMany =
+                (await GetNoticiaAreaInteresseAsync(request, cancellationToken)).ToList();
+            HashSet<long> areaInteresseIdSet = areaInteresseIds.ToHashSet();
+            HashSet<long> areaInteresseExistenteIds = noticiaAreaInteresseMany
+                .Select(item => item.AreaInteresseId)
+                .ToHashSet();
 
-            IEnumerable<NoticiaAreaInteresse> noticiaAreaInteresseMany = await GetNoticiaAreaInteresseAsync(request, cancellationToken);
-
-            foreach (long areaInteresseId in request.AreaInteresseMany)
-            {
-                NoticiaAreaInteresse inserirNoticiaAreaInteresse = new NoticiaAreaInteresse();
-                inserirNoticiaAreaInteresse.AreaInteresseId = areaInteresseId;
-                inserirNoticiaAreaInteresse.NoticiaId = request.Id;
-
-                if (!noticiaAreaInteresseMany.Any(item => item.AreaInteresseId.Equals(inserirNoticiaAreaInteresse.AreaInteresseId)))
+            List<NoticiaAreaInteresse> noticiaAreaInteresseInserir = areaInteresseIds
+                .Where(areaInteresseId => !areaInteresseExistenteIds.Contains(areaInteresseId))
+                .Select(areaInteresseId => new NoticiaAreaInteresse
                 {
-                    await _repositoryNoticiaAreaInteresse.UpdateAsync(inserirNoticiaAreaInteresse);
-                    await _repositoryNoticiaAreaInteresse.SaveChangesAsync(cancellationToken);
-                }
-            }
+                    AreaInteresseId = areaInteresseId,
+                    NoticiaId = request.Id
+                })
+                .ToList();
 
             foreach (NoticiaAreaInteresse noticiaAreaInteresse in noticiaAreaInteresseMany)
             {
-                if (!request.AreaInteresseMany.Any(item => item.Equals(noticiaAreaInteresse.AreaInteresseId)))
-                {
+                if (!areaInteresseIdSet.Contains(noticiaAreaInteresse.AreaInteresseId))
                     await _repositoryNoticiaAreaInteresse.RemoveAsync(noticiaAreaInteresse);
-                    await _repositoryNoticiaAreaInteresse.SaveChangesAsync(cancellationToken);
-                }
             }
 
-            IEnumerable<AreaInteresse> areaInteresseMany = await GetAreaInteresseAsync(cancellationToken);
+            if (noticiaAreaInteresseInserir.Count > 0)
+                await _repositoryNoticiaAreaInteresse.AddCollectionAsync(noticiaAreaInteresseInserir, cancellationToken);
 
-            List<AreaInteresse> areaInteresseResponse = new List<AreaInteresse>();
-            foreach (long item in request.AreaInteresseMany)
+            await _repositoryNoticiaAreaInteresse.SaveChangesAsync(cancellationToken);
+        }
+
+        private static List<AreaInteresse> SelecionarAreasInteresse
+        (
+            IEnumerable<long> areaInteresseIds,
+            IEnumerable<AreaInteresse> areaInteresseMany
+        )
+        {
+            return areaInteresseIds
+                .Select(areaInteresseId => areaInteresseMany.First(area => area.Id.Equals(areaInteresseId)))
+                .ToList();
+        }
+
+        private static AtualizarNoticiaCommandResponse ToResponse
+        (
+            Noticia noticia,
+            AtualizarNoticiaCommand request,
+            IEnumerable<AreaInteresse> areaInteresseMany
+        )
+        {
+            return new AtualizarNoticiaCommandResponse
             {
-                AreaInteresse areaInteresse = areaInteresseMany.First(area => area.Id.Equals(item));
-                if (areaInteresse is not null)
-                    areaInteresseResponse.Add(areaInteresse);
-            }
-
-            AtualizarNoticiaCommandResponse response = new AtualizarNoticiaCommandResponse();
-            response.Id = request.Id;
-            response.DataCadastro = noticia.DataCadastro;
-            response.DataAtualizacao = noticia.DataAtualizacao;
-
-            response.AreaInteresseMany = areaInteresseResponse;
-            response.Titulo = request.Titulo;
-            response.Resumo = request.Resumo;
-            response.Conteudo = request.Conteudo;
-            response.UsuarioCadastroId = response.UsuarioCadastroId;
-            response.SociedadeId = response.SociedadeId;
-
-            return response;
+                Id = request.Id,
+                DataCadastro = noticia.DataCadastro,
+                DataAtualizacao = noticia.DataAtualizacao.GetValueOrDefault(),
+                AreaInteresseMany = areaInteresseMany,
+                Titulo = request.Titulo,
+                Resumo = request.Resumo,
+                Conteudo = request.Conteudo,
+                UsuarioCadastroId = noticia.UsuarioCadastroId,
+                SociedadeId = noticia.SociedadeId
+            };
         }
 
         private async Task Validator
@@ -124,9 +156,9 @@ namespace ms_usuario.Features.NoticiaFeature.Commands
             CancellationToken cancellationToken
         )
         {
-            if (String.IsNullOrEmpty(request.Titulo)) throw new ArgumentNullException(MessageHelper.NullFor<InserirNoticiaCommand>(item => item.Titulo));
-            if (String.IsNullOrEmpty(request.Resumo)) throw new ArgumentNullException(MessageHelper.NullFor<InserirNoticiaCommand>(item => item.Resumo));
-            if (String.IsNullOrEmpty(request.Conteudo)) throw new ArgumentNullException(MessageHelper.NullFor<InserirNoticiaCommand>(item => item.Conteudo));
+            if (String.IsNullOrEmpty(request.Titulo)) throw new ArgumentNullException(MessageHelper.NullFor<AtualizarNoticiaCommand>(item => item.Titulo));
+            if (String.IsNullOrEmpty(request.Resumo)) throw new ArgumentNullException(MessageHelper.NullFor<AtualizarNoticiaCommand>(item => item.Resumo));
+            if (String.IsNullOrEmpty(request.Conteudo)) throw new ArgumentNullException(MessageHelper.NullFor<AtualizarNoticiaCommand>(item => item.Conteudo));
             if (!await ExistsNoticiaAsync(request, cancellationToken)) throw new ArgumentNullException("Noticia não existe");
         }
 
@@ -140,7 +172,7 @@ namespace ms_usuario.Features.NoticiaFeature.Commands
                 (
                     item => item.Id.Equals(request.Id),
                     cancellationToken
-                );
+                ) ?? throw new ArgumentNullException("Noticia não existe");
         }
 
         private async Task<IEnumerable<NoticiaAreaInteresse>> GetNoticiaAreaInteresseAsync

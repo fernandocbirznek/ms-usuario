@@ -1,7 +1,6 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ms_usuario;
-using ms_usuario.Domains;
 using ms_usuario.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,16 +36,8 @@ builder.Services.SetupRepositories();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(AreaInteresse).Assembly));
-builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(Conquistas).Assembly));
-builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(Sociedade).Assembly));
-builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(Noticia).Assembly));
-builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(NoticiaAreaInteresse).Assembly));
-builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(Usuario).Assembly));
-builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(UsuarioAreaInteresse).Assembly));
-builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(UsuarioConquistas).Assembly));
-builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(UsuarioNoticiaFavoritado).Assembly));
-builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(UsuarioPerfil).Assembly));
+builder.Services.AddMediatR(configuration =>
+    configuration.RegisterServicesFromAssembly(typeof(UsuarioDbContext).Assembly));
 
 var app = builder.Build();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -67,6 +58,10 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Services.CreateScope().ServiceProvider.GetRequiredService<UsuarioDbContext>().Database.Migrate();
+using (IServiceScope scope = app.Services.CreateScope())
+{
+    UsuarioDbContext dbContext = scope.ServiceProvider.GetRequiredService<UsuarioDbContext>();
+    dbContext.Database.Migrate();
+}
 
 app.Run();

@@ -53,7 +53,7 @@ namespace ms_usuario.Features.NoticiaFeature.Commands
             if (request is null)
                 throw new ArgumentNullException(MessageHelper.NullFor<InserirNoticiaCommand>());
 
-            await Validator(request, cancellationToken);
+            Validator(request);
 
             Noticia noticia = request.ToDomain();
 
@@ -61,18 +61,18 @@ namespace ms_usuario.Features.NoticiaFeature.Commands
             await _repository.SaveChangesAsync(cancellationToken);
 
             if (request.AreaInteresseMany is not null)
-                foreach (long noticiaAreaInteresse in request.AreaInteresseMany)
-                {
-                    NoticiaAreaInteresse inserirNoticiaAreaInteresse = new()
+            {
+                IEnumerable<NoticiaAreaInteresse> noticiaAreaInteresseMany = request.AreaInteresseMany
+                    .Select(areaInteresseId => new NoticiaAreaInteresse
                     {
                         NoticiaId = noticia.Id,
-                        AreaInteresseId = noticiaAreaInteresse,
+                        AreaInteresseId = areaInteresseId,
                         DataCadastro = DateTime.Now
-                    }; ;
+                    });
 
-                    await _repositoryNoticiaAreaInteresse.AddAsync(inserirNoticiaAreaInteresse, cancellationToken);
-                    await _repositoryNoticiaAreaInteresse.SaveChangesAsync(cancellationToken);
-                }
+                await _repositoryNoticiaAreaInteresse.AddCollectionAsync(noticiaAreaInteresseMany, cancellationToken);
+                await _repositoryNoticiaAreaInteresse.SaveChangesAsync(cancellationToken);
+            }
 
             InserirNoticiaCommandResponse response = new InserirNoticiaCommandResponse();
             response.DataCadastro = noticia.DataCadastro;
@@ -82,16 +82,15 @@ namespace ms_usuario.Features.NoticiaFeature.Commands
             response.Titulo = request.Titulo;
             response.Resumo = request.Resumo;
             response.Conteudo = request.Conteudo;
-            response.UsuarioCadastroId = response.UsuarioCadastroId;
-            response.SociedadeId = response.SociedadeId;
+            response.UsuarioCadastroId = noticia.UsuarioCadastroId;
+            response.SociedadeId = noticia.SociedadeId;
 
             return response;
         }
 
-        private async Task Validator
+        private void Validator
         (
-            InserirNoticiaCommand request,
-            CancellationToken cancellationToken
+            InserirNoticiaCommand request
         )
         {
             if (String.IsNullOrEmpty(request.Titulo)) throw new ArgumentNullException(MessageHelper.NullFor<InserirNoticiaCommand>(item => item.Titulo));

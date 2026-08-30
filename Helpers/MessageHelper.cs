@@ -18,11 +18,16 @@ namespace ms_usuario.Helpers
 
         public static string NullFor<T>(Expression<Func<T, object>> property) => $"Campo '{typeof(T).Name}.{GetName(property)}' é nulo.";
 
-        public static string NullFor<T>() => $"'{nameof(T)}' é nulo.";
+        public static string NullFor<T>() => $"'{typeof(T).Name}' é nulo.";
 
         public static string InactiveFor<T>(T o, Expression<Func<T, object>> property) => $"{typeof(T).Name}.{GetName(property)}: '{GetValue(o, property)}' está inátivo.";
 
-        private static string GetName<T>(Expression<Func<T, object>> property) => GetMemberExpression(property).Member.Name;
+        private static string GetName<T>(Expression<Func<T, object>> property)
+        {
+            MemberExpression? memberExpression = GetMemberExpression(property);
+            return memberExpression?.Member.Name
+                ?? throw new ArgumentException("A expressão deve apontar para uma propriedade.", nameof(property));
+        }
 
         private static string? GetValue<T>(T o, Expression<Func<T, object>> property)
         {

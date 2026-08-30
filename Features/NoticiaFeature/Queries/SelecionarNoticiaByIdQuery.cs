@@ -44,8 +44,6 @@ namespace ms_usuario.Features.NoticiaFeature.Queries
 
             Noticia noticia = await GetFirstAsync(request, cancellationToken);
 
-            Validator(noticia);
-
             SelecionarNoticiaByIdQueryResponse response = new SelecionarNoticiaByIdQueryResponse();
             response.Titulo = noticia.Titulo;
             response.Resumo = noticia.Resumo;
@@ -55,17 +53,10 @@ namespace ms_usuario.Features.NoticiaFeature.Queries
             response.DataCadastro = noticia.DataCadastro;
             response.DataAtualizacao = noticia.DataAtualizacao;
             response.Id = noticia.Id;
+            response.UsuarioCadastroId = noticia.UsuarioCadastroId;
             response.SociedadeId = noticia.SociedadeId;
 
             return response;
-        }
-
-        private void Validator
-        (
-            Noticia noticia
-        )
-        {
-            if (noticia is null) throw new ArgumentNullException("Noticia não encontrado");
         }
 
         private async Task<Noticia> GetFirstAsync
@@ -74,12 +65,12 @@ namespace ms_usuario.Features.NoticiaFeature.Queries
             CancellationToken cancellationToken
         )
         {
-            return await _repository.GetFirstAsync
+            return await _repository.GetFirstAsNoTrackingAsync
                 (
                     item => item.Id.Equals(request.Id),
                     cancellationToken,
                     item => item.NoticiaAreaInteresseMany
-                );
+                ) ?? throw new ArgumentNullException("Noticia não encontrado");
         }
     }
 }

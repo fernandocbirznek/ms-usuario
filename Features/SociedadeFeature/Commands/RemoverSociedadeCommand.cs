@@ -38,7 +38,8 @@ namespace ms_usuario.Features.SociedadeFeature.Commands
 
             await Validator(request, cancellationToken);
 
-            Sociedade sociedade = await _repository.GetFirstAsync(item => item.Id.Equals(request.Id), cancellationToken);
+            Sociedade sociedade = await _repository.GetFirstAsync(item => item.Id.Equals(request.Id), cancellationToken)
+                ?? throw new ArgumentNullException("Sociedade não encontrada");
 
             await _repository.RemoveAsync(sociedade);
             await _repository.SaveChangesAsync(cancellationToken);

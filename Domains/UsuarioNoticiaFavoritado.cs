@@ -6,7 +6,7 @@
         public long NoticiaId { get; set; }
 
         private Noticia _Noticia;
-        public virtual Noticia Noticia { get { return _Noticia; } set { Noticia = value; SetNoticia(value); } }
+        public virtual Noticia Noticia { get { return _Noticia; } set { _Noticia = value; SetNoticia(value); } }
 
         private void SetNoticia(Noticia value)
         {

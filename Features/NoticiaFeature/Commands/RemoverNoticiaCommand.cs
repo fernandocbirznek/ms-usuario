@@ -38,7 +38,8 @@ namespace ms_usuario.Features.NoticiaFeature.Commands
 
             await Validator(request, cancellationToken);
 
-            Noticia noticia = await _repository.GetFirstAsync(item => item.Id.Equals(request.Id), cancellationToken);
+            Noticia noticia = await _repository.GetFirstAsync(item => item.Id.Equals(request.Id), cancellationToken)
+                ?? throw new ArgumentNullException("Noticia não encontrada");
 
             await _repository.RemoveAsync(noticia);
             await _repository.SaveChangesAsync(cancellationToken);

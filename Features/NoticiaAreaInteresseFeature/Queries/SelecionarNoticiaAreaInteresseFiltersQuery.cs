@@ -37,18 +37,18 @@ namespace ms_usuario.Features.NoticiaAreaInteresseFeature.Queries
             if (request is null)
                 throw new ArgumentNullException(MessageHelper.NullFor<SelecionarNoticiaAreaInteresseFiltersQuery>());
 
-            IEnumerable<NoticiaAreaInteresse> conquistasMany = await _repository.GetAsync(cancellationToken);
+            IEnumerable<NoticiaAreaInteresse> noticiaAreaInteresseMany = await _repository.GetAsNoTrackingAsync(cancellationToken);
 
             List<SelecionarNoticiaAreaInteresseFiltersQueryResponse> responseMany = new List<SelecionarNoticiaAreaInteresseFiltersQueryResponse>();
 
-            foreach (NoticiaAreaInteresse conquistas in conquistasMany)
+            foreach (NoticiaAreaInteresse noticiaAreaInteresse in noticiaAreaInteresseMany)
             {
                 SelecionarNoticiaAreaInteresseFiltersQueryResponse response = new SelecionarNoticiaAreaInteresseFiltersQueryResponse();
-                response.NoticiaId = conquistas.NoticiaId;
-                response.AreaInteresseId = conquistas.AreaInteresseId;
-                response.DataCadastro = conquistas.DataCadastro;
-                response.DataAtualizacao = conquistas.DataAtualizacao;
-                response.Id = conquistas.Id;
+                response.NoticiaId = noticiaAreaInteresse.NoticiaId;
+                response.AreaInteresseId = noticiaAreaInteresse.AreaInteresseId;
+                response.DataCadastro = noticiaAreaInteresse.DataCadastro;
+                response.DataAtualizacao = noticiaAreaInteresse.DataAtualizacao;
+                response.Id = noticiaAreaInteresse.Id;
                 responseMany.Add(response);
             }
 

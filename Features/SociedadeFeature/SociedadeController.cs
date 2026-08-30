@@ -39,7 +39,7 @@ namespace ms_usuario.Features.SociedadeFeature
         }
 
         [HttpGet("selecionar-sociedade/{sociedadeId}")]
-        public async Task<ActionResult> GetForum(long sociedadeId)
+        public async Task<ActionResult> GetSociedade(long sociedadeId)
         {
             return await this.SendAsync(_mediator, new SelecionarSociedadeByIdQuery() { Id = sociedadeId });
         }

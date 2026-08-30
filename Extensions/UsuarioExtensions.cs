@@ -19,7 +19,7 @@ namespace ms_usuario.Extensions
                 Email = request.Email,
                 Senha = CriptografarSenha(request.Senha, salt),
                 Salt = salt,
-                TipoUsuario = 1,
+                TipoUsuario = Domains.Enums.TipoUsuarioEnum.Comum,
                 DataCadastro = DateTime.Now,
                 Perfil = new()
             };
@@ -36,7 +36,7 @@ namespace ms_usuario.Extensions
             usuario.Email = request.Email;
             //usuario.Senha = CriptografarSenha(request.Senha, salt);
             //usuario.Salt = salt;
-            usuario.TipoUsuario = request.TipoUsuario;
+            usuario.TipoUsuario = (Domains.Enums.TipoUsuarioEnum)request.TipoUsuario;
             //usuario.SociedadeId = request.SociedadeId;
             usuario.DataAtualizacao = DateTime.Now;
         }
@@ -48,6 +48,18 @@ namespace ms_usuario.Extensions
         )
         {
             return Sha256(request.Senha + salt);
+        }
+
+        public static bool SenhaCorresponde
+        (
+            this LoginCommand request,
+            string salt,
+            string senhaHash
+        )
+        {
+            byte[] hashCalculado = Encoding.ASCII.GetBytes(request.ObterHash(salt));
+            byte[] hashArmazenado = Encoding.ASCII.GetBytes(senhaHash);
+            return CryptographicOperations.FixedTimeEquals(hashCalculado, hashArmazenado);
         }
 
         public static LoginCommandResponse ToLoginResponse
@@ -62,7 +74,7 @@ namespace ms_usuario.Extensions
                 Id = usuario.Id,
                 Nome = usuario.Nome,
                 Email = usuario.Email,
-                TipoUsuario = usuario.TipoUsuario,
+                TipoUsuario = (int)usuario.TipoUsuario,
                 ComentarioForum = usuario.ComentarioForum,
                 TopicoForum = usuario.TopicoForum,
                 ComentarioAula = usuario.ComentarioAula,
@@ -111,22 +123,13 @@ namespace ms_usuario.Extensions
 
         private static string Sha256(string randomString)
         {
-            var crypt = new SHA256Managed();
-            string hash = String.Empty;
-            byte[] crypto = crypt.ComputeHash(Encoding.ASCII.GetBytes(randomString));
-            foreach (byte theByte in crypto)
-            {
-                hash += theByte.ToString("x2");
-            }
-            return hash;
+            byte[] crypto = SHA256.HashData(Encoding.ASCII.GetBytes(randomString));
+            return Convert.ToHexString(crypto).ToLowerInvariant();
         }
 
         private static string CreateSalt()
         {
-            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
-            byte[] buff = new byte[32];
-            rng.GetBytes(buff);
-            return Convert.ToBase64String(buff);
+            return Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
         }
     }
 }

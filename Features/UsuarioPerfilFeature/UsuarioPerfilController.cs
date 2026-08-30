@@ -39,7 +39,7 @@ namespace ms_usuario.Features.UsuarioPerfilFeature
         }
 
         [HttpGet("selecionar-perfil-usuario/{usuarioId}")]
-        public async Task<ActionResult> GetForum(long usuarioId)
+        public async Task<ActionResult> GetUsuarioPerfil(long usuarioId)
         {
             return await this.SendAsync(_mediator, new SelecionarUsuarioPerfilByUsuarioIdQuery() { Id = usuarioId });
         }
